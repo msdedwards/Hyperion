@@ -19,12 +19,23 @@ begin
 	nib2 <= instr(11 downto 8);
 	nib1 <= instr(15 downto 12);
 	
-	getaddrs: process(nib1)
+	getaddrs: process(nib1,nib2, nib3, nib4)
 	begin
 		case nib1 is
-			when "0000" | "0001" | "0010" =>
+			when "0000" | "0001" | "0010" => -- add, cp, sub, and, eor, or, mov
 				a1 <= nib2(1) & nib4;
 				a2 <= nib2(0) & nib3;
+			when "1110" => -- LDI 
+				a1 <= "-----";
+				a2 <= "1" & nib3;
+			when "1000" =>
+				if (nib2(1) = '1') then -- ST (z)
+					a1 <= "-----";
+					a2 <= nib2(0) & nib3;
+				elsif (nib2(1) = '0') then -- LD (z)
+					a1 <= nib2(0) & nib3;
+					a2 <= "-----";
+				end if;
 			when others =>
 				a1 <= "-----";
 				a2 <= "-----";
