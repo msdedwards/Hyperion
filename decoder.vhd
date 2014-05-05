@@ -19,6 +19,18 @@ begin
 	nib2 <= instr(11 downto 8);
 	nib1 <= instr(15 downto 12);
 	
+	getaddrs: process(nib1)
+	begin
+		case nib1 is
+			when "0000" | "0001" | "0010" =>
+				a1 <= nib2(1) & nib4;
+				a2 <= nib2(0) & nib3;
+			when others =>
+				a1 <= "-----";
+				a2 <= "-----";
+			end case;
+	end process;
+	
 	getimm: process(nib1, nib2, nib4)
 	begin
 		case nib1 is
