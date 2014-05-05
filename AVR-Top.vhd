@@ -22,17 +22,23 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 
 
-entity AVR-Top is
+entity AVRTop is
 	port(	 clk, reset: in std_logic;
 						pc: inout std_logic_vector(15 downto 0)
 						
 		  );
-end AVR-Top;
+end AVRTop;
 
-architecture Behavioral of AVR-Top is
-
+architecture Behavioral of AVRTop is
+	component AVR is
+		port( clk 	: in std_logic;
+				reset : in std_logic;
+				instr : in std_logic_vector(15 downto 0)
+		);
+	end component AVR;
+	signal instr: std_logic_vector(15 downto 0);
 begin
-
+	AVR1: AVR port map(clk,reset,instr);
 
 end Behavioral;
 

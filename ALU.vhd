@@ -1,19 +1,6 @@
 library IEEE; 
 use IEEE.STD_LOGIC_1164.all; 
 use IEEE.STD_LOGIC_UNSIGNED.all;
-package alu_pckg is
-	component alu is -- Arithmetic/Logic unit with add/sub, AND, OR, set less than
-	  port (a, b:       in  STD_LOGIC_VECTOR(7 downto 0);
-			 alucontrol: in  STD_LOGIC_VECTOR(2 downto 0);
-			 result:     inout STD_LOGIC_VECTOR(7 downto 0);
-			 statusreg:	 inout STD_LOGIC_VECTOR(7 downto 0)
-			 );
-	end component alu;
-end package alu_pckg;
-
-library IEEE; 
-use IEEE.STD_LOGIC_1164.all; 
-use IEEE.STD_LOGIC_UNSIGNED.all;
 
 entity alu is -- Arithmetic/Logic unit with add/sub, AND, OR, set less than
 	 port(a, b:       in  STD_LOGIC_VECTOR(7 downto 0);
@@ -22,14 +9,13 @@ entity alu is -- Arithmetic/Logic unit with add/sub, AND, OR, set less than
 		 statusreg:	 inout STD_LOGIC_VECTOR(7 downto 0));
 end;
 
-
 architecture behave of alu is
 	signal i,t,h,s,v,n,z,c: std_logic;
 	signal r: std_logic_vector(7 downto 0);
 begin
 	
 	result <= r;
-	with alucontrol(2 downto 0) select result <=
+	with alucontrol(2 downto 0) select r <=
 		a and b when "010",
 		a or b  when "001",
 		a xor b when "011",

@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    12:25:55 05/05/2014 
+-- Create Date:    13:26:09 05/05/2014 
 -- Design Name: 
--- Module Name:    ControlUnit - Behavioral 
+-- Module Name:    StatusRegister - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -20,24 +20,19 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-entity ControlUnit is
+entity StatusRegister is
 	port(
-		op 				: in std_logic_vector(3 downto 0);
-		controlSignals : out std_logic;
-		statusSignals 	: in std_logic_vector(7 downto 0)
+		currentValue 	: in std_logic_vector(7 downto 0);
+		nextValue		: out std_logic_vector(7 downto 0)
 	);
-end ControlUnit;
-	
+end StatusRegister;
+
 library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;	
-	
-package ControlUnitPackage is
-	
-end package ControlUnitPackage;
+use IEEE.STD_LOGIC_1164.ALL;
 
 
 
-architecture Behavioral of ControlUnit is
+architecture Behavioral of StatusRegister is
 
 begin
 
