@@ -22,8 +22,7 @@ begin
 	getop: process(nib1, nib2, nib3, nib4)
 	begin
 		case nib1 is
-			when "0000" =>
-				op <= "0000";
+			when "0000" => op <= "0000";
 			when "0001" =>
 				if (nib2(3) = '0') then
 					op <= "0001";
@@ -44,8 +43,7 @@ begin
 				else
 					op <= "1000";
 				end if;
-			when "1110" =>
-				op <= "1001";
+			when "1110" => op <= "1001";
 			when "1111" =>
 				if (nib2(2) = '0') then
 					op <= "1010";
