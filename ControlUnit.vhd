@@ -23,7 +23,11 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity ControlUnit is
 	port(
 		op 				: in std_logic_vector(3 downto 0);
-		controlSignals : out std_logic;
+		PCSRC				: out std_logic;
+		REGWRITE			: out std_logic;
+		MEMOP				: out std_logic;	
+		DATWRITE			: out std_logic;	
+		REGSRC 			: out std_logic;
 		statusSignals 	: in std_logic_vector(7 downto 0)
 	);
 end ControlUnit;
@@ -34,4 +38,5 @@ begin
 
 
 end Behavioral;
+
 

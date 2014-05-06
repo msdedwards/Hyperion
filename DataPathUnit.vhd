@@ -23,7 +23,11 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity DataPathUnit is 
 		port(
 			clk 				: in std_logic;
-			controlSignals : in std_logic;
+			PCSRC				: in std_logic;
+			REGWRITE			: in std_logic;
+			MEMOP				: in std_logic;	
+			DATWRITE			: in std_logic;	
+			REGSRC 			: in std_logic;
 			statusSignals 	: inout std_logic_vector(7 downto 0);
 			instr 			: in std_logic_vector(15 downto 0)
 		);						
@@ -64,7 +68,6 @@ architecture Behavioral of DataPathUnit is
 	signal imm,srcA,srcB,writeData,memData,result: std_logic_vector(7 downto 0);
 	signal addr1,addr2:std_logic_vector(4 downto 0);
 	signal op : std_logic_vector(3 downto 0);
-	signal RegWrite,MemOp: std_logic;
 	signal aluControl: std_logic_vector(2 downto 0);
 begin
 	dec: Decoder port map (instr,imm,addr1,addr2,op);
