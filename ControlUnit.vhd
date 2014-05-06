@@ -27,15 +27,6 @@ entity ControlUnit is
 		statusSignals 	: in std_logic_vector(7 downto 0)
 	);
 end ControlUnit;
-	
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;	
-	
-package ControlUnitPackage is
-	
-end package ControlUnitPackage;
-
-
 
 architecture Behavioral of ControlUnit is
 
