@@ -27,7 +27,7 @@ entity ControlUnit is
 		REGWRITE			: out std_logic;
 		MEMOP				: out std_logic;	
 		DATWRITE			: out std_logic;	
-		REGSRC 			: out std_logic;
+		REGSRC 			: out std_logic_vector(1 downto 0);
 		statusSignals 	: in std_logic_vector(7 downto 0)
 	);
 end ControlUnit;

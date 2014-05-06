@@ -27,8 +27,9 @@ entity DataPathUnit is
 			REGWRITE			: in std_logic;
 			MEMOP				: in std_logic;	
 			DATWRITE			: in std_logic;	
-			REGSRC 			: in std_logic;
+			REGSRC 			: in std_logic_vector(1 downto 0);
 			statusSignals 	: inout std_logic_vector(7 downto 0);
+			op					: out std_logic_vector(3 downto 0);
 			instr 			: in std_logic_vector(15 downto 0)
 		);						
 end DataPathUnit;
@@ -64,15 +65,98 @@ architecture Behavioral of DataPathUnit is
 			rd1, rd2, md:  out STD_LOGIC_VECTOR(7 downto 0)
 		);
 	end component regfile;
+	component mux4 is -- four-input multiplexer
+	  generic(width: integer);
+	  port(d0, d1, d2, d3: in  STD_LOGIC_VECTOR(width-1 downto 0);
+			 s:      in  STD_LOGIC_VECTOR(1 downto 0);
+			 y:      out STD_LOGIC_VECTOR(width-1 downto 0));
+	end component mux4;
+	component mux2 is -- two-input multiplexer
+		generic(width: integer);
+		port(d0, d1: in  STD_LOGIC_VECTOR(width-1 downto 0);
+			 s:      in  STD_LOGIC;
+			 y:      out STD_LOGIC_VECTOR(width-1 downto 0));
+	end component mux2;
+	component adder is -- adder
+		generic(width: integer);
+		port(a, b: in  STD_LOGIC_VECTOR(width-1 downto 0);
+			 y:    out STD_LOGIC_VECTOR(width-1 downto 0));
+	end component adder;
 	
 	signal imm,srcA,srcB,writeData,memData,result: std_logic_vector(7 downto 0);
+	signal pc,pcPlusOne,pcJump,ZeroExtImm: std_logic_vector(15 downto 0);
 	signal addr1,addr2:std_logic_vector(4 downto 0);
-	signal op : std_logic_vector(3 downto 0);
 	signal aluControl: std_logic_vector(2 downto 0);
 begin
-	dec: Decoder port map (instr,imm,addr1,addr2,op);
-	alu1: ALU port map (srcA,srcB,aluControl,result,statusSignals);
-	reg: regfile port map (clk,RegWrite,MemOp,addr1,addr2,writeData,srcA,srcB,memData);
+	ZeroExtImm <= "00000000"&imm;
+
+	RegSrcMux: mux4
+	generic map(8)
+	port map
+	(
+		d0 => imm,
+		d1 => "XXXXXXXX", -- will be the out data from the data memory
+		d2 => result,
+		d3 => "XXXXXXXX",
+		s  => REGSRC,
+		y  => writeData
+	);
+	PCAdder:adder
+	generic map(16)
+	port map
+	(
+		a => pc,
+		b => "0000000000000001",
+		y => pcPlusOne
+	);
+	JumpAdder:adder
+	generic map(16)
+	port map
+	(
+		a => ZeroExtImm,
+		b => pcPlusOne,
+		y => pcJump
+	);
+	PCMux: mux2
+	generic map(16)
+	port map
+	(
+		d0 => pcPlusOne,
+		d1 => pcJump,
+		s  => PCSRC,
+		y  => pc
+	);
+	dec: Decoder 
+	port map 
+	(
+		instr => instr,
+		imm => imm,
+		a1 => addr1,
+		a2 => addr2,
+		op => op
+	);
+	alu1: ALU 
+	port map 
+	(
+		a => srcA,
+		b => srcB,
+		alucontrol => aluControl,
+		result => result,
+		statusreg => statusSignals
+	);
+	reg: regfile
+	port map 
+	(
+		clk => clk,
+		RegWrite => RegWrite,
+		MemOp => MemOp,
+		a1 => addr1,
+		a2 => addr2,
+		wd => writeData,
+		rd1 => srcA,
+		rd2 => srcB,
+		md => memData
+	);
 
 end Behavioral;
 

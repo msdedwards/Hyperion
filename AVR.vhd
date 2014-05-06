@@ -36,7 +36,7 @@ architecture Behavioral of AVR is
 			REGWRITE			: out std_logic;
 			MEMOP				: out std_logic;	
 			DATWRITE			: out std_logic;	
-			REGSRC 			: out std_logic;
+			REGSRC 			: out std_logic_vector(1 downto 0);
 			statusSignals 	: in std_logic_vector(7 downto 0)
 		);
 	end component;
@@ -47,8 +47,9 @@ architecture Behavioral of AVR is
 				REGWRITE			: in std_logic;
 				MEMOP				: in std_logic;	
 				DATWRITE			: in std_logic;	
-				REGSRC 			: in std_logic;
+				REGSRC 			: in std_logic_vector(1 downto 0);
 				statusSignals 	: out std_logic_vector(7 downto 0);
+				op					: out std_logic_vector(3 downto 0);
 				instr 			: in std_logic_vector(15 downto 0)
 			);
 	end component DataPathUnit;
@@ -65,7 +66,7 @@ architecture Behavioral of AVR is
 	signal REGWRITE: std_logic;
 	signal MEMOP	: std_logic;	
 	signal DATWRITE: std_logic;	
-	signal REGSRC : std_logic;
+	signal REGSRC : std_logic_vector(1 downto 0);
 	signal statusSignalsIn:std_logic_vector(7 downto 0);
 	signal statusSignalsOut:std_logic_vector(7 downto 0);
 	
@@ -73,9 +74,36 @@ architecture Behavioral of AVR is
 
 
 begin
-	cu: ControlUnit port map(op,PCSRC,REGWRITE,MEMOP,DATWRITE,REGSRC,statusSignalsIn);
-	dp: DataPathUnit port map(clk,PCSRC,REGWRITE,MEMOP,DATWRITE,REGSRC,statusSignalsOut,instr);
-	sr: StatusRegister port map(statusSignalsOut,statusSignalsIn);
+	cu: ControlUnit 
+	port map
+	(
+		op => op,
+		PCSRC => PCSRC,
+		REGWRITE => REGWRITE,
+		MEMOP => MEMOP,
+		DATWRITE => DATWRITE,
+		REGSRC => REGSRC,
+		statusSignals => statusSignalsIn
+	);
+	dp: DataPathUnit 
+	port map
+	(
+		clk => clk,
+		PCSRC => PCSRC,
+		REGWRITE => REGWRITE,
+		MEMOP => MEMOP,
+		DATWRITE => DATWRITE,
+		REGSRC => REGSRC,
+		statusSignals => statusSignalsOut,
+		op => op,
+		instr => instr
+	);
+	sr: StatusRegister 
+	port map
+	(
+		currentValue => statusSignalsOut,
+		nextValue => statusSignalsIn
+	);
 
 end Behavioral;
 
