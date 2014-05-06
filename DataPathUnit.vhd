@@ -65,6 +65,14 @@ architecture Behavioral of DataPathUnit is
 			rd1, rd2, md:  out STD_LOGIC_VECTOR(7 downto 0)
 		);
 	end component regfile;
+	component DataMemory is
+		port(
+			DatWrite: in std_logic;
+			addr: in std_logic_vector(15 downto 0);
+			dataIn: in std_logic_vector(7 downto 0)
+		);
+	end component DataMemory;
+	
 	component mux4 is -- four-input multiplexer
 	  generic(width: integer);
 	  port(d0, d1, d2, d3: in  STD_LOGIC_VECTOR(width-1 downto 0);
@@ -84,11 +92,12 @@ architecture Behavioral of DataPathUnit is
 	end component adder;
 	
 	signal imm,srcA,srcB,writeData,memData,result: std_logic_vector(7 downto 0);
-	signal pc,pcPlusOne,pcJump,ZeroExtImm: std_logic_vector(15 downto 0);
+	signal pc,pcPlusOne,pcJump,ZeroExtImm,dataMemoryAddr: std_logic_vector(15 downto 0);
 	signal addr1,addr2:std_logic_vector(4 downto 0);
 	signal aluControl: std_logic_vector(2 downto 0);
 begin
 	ZeroExtImm <= "00000000"&imm;
+	dataMemoryAddr <= srcA&srcB;
 
 	RegSrcMux: mux4
 	generic map(8)
@@ -156,6 +165,13 @@ begin
 		rd1 => srcA,
 		rd2 => srcB,
 		md => memData
+	);
+	dm : DataMemory
+	port map
+	(	
+		DatWrite => DATWRITE,
+		addr => dataMemoryAddr,
+		dataIn => memData
 	);
 
 end Behavioral;
