@@ -52,11 +52,13 @@ architecture Behavioral of AVR is
 				instr 			: out std_logic_vector(15 downto 0)
 			);
 	end component DataPathUnit;
-	component StatusRegister
-		port(
-			currentValue 	: in std_logic_vector(7 downto 0);
-			nextValue		: out std_logic_vector(7 downto 0)
-		);
+	
+	component StatusRegister is
+	port(
+		clk				: in std_logic;
+		srin 	: in std_logic_vector(7 downto 0);
+		srout		: out std_logic_vector(7 downto 0)
+	);
 	end component;
 
 
@@ -101,8 +103,9 @@ begin
 	sr: StatusRegister 
 	port map
 	(
-		currentValue => statusSignalsOut,
-		nextValue => statusSignalsIn
+		clk => clk,
+		srout => statusSignalsOut,
+		srin => statusSignalsIn
 	);
 
 end Behavioral;
