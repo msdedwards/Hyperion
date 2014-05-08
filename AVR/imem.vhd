@@ -19,7 +19,7 @@ use IEEE.STD_LOGIC_UNSIGNED.all;
 use IEEE.NUMERIC_STD.all;
 
 entity imem is -- instruction memory
-  port(a:  in  STD_LOGIC_VECTOR(5 downto 0);
+  port(a:  in  STD_LOGIC_VECTOR(15 downto 0);
        rd: out STD_LOGIC_VECTOR(15 downto 0));
 end;
 
