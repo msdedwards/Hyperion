@@ -81,49 +81,49 @@ end entity;
  architecture arch of test_dualport is
 begin
 
-  u0 : test_dualport_core
-    generic map(
-      FREQ        => 100_000,
-      CLK_DIV     => 1.0,
-      PIPE_EN     => true,
-      DATA_WIDTH  => sData'length,
-      SADDR_WIDTH => sAddr'length,
-      NROWS       => 8192,
-      NCOLS       => 512,
-      BEG_ADDR    => 16#00_0000#,
-      END_ADDR    => 16#FF_FFFF#,
-      BEG_TEST_0  => 16#00_0000#,
-      END_TEST_0  => 16#7F_FFFF#,
-      BEG_TEST_1  => 16#80_0000#,
-      END_TEST_1  => 16#FF_FFFF#
-      )
-    port map(
-      sw2_n    	=> sw2,
-      clk         => clk,
-      sclkfb      => sclkfb,
-      sclk        => sclk,
-      cke         => cke,
-      cs_n        => cs_n,	
-      ras_n       => ras_n,
-      cas_n       => cas_n,
-      we_n        => we_n,
-      ba          => ba,
-      sAddr       => sAddr,
-      sData       => sData,
-      dqmh        => dqmh,
-      dqml        => dqml,
-		hdout1		=> hdout1,
-		done1			=> done1,
-		done0			=> done0,
-		haddr1		=> haddr1,
-		hdin0			=> hdin0,
-		haddr0		=> haddr0,
-		wr0 			=> wr0,
-		rd1			=> rd1,
-		earlyBegun0 => earlyBegun0,
-		earlyBegun1 => earlyBegun1,
-		clk_i			=> clk_i
-      );
+--  u0 : test_dualport_core
+--    generic map(
+--      FREQ        => 100_000,
+--      CLK_DIV     => 1.0,
+--      PIPE_EN     => true,
+--      DATA_WIDTH  => sData'length,
+--      SADDR_WIDTH => sAddr'length,
+--      NROWS       => 8192,
+--      NCOLS       => 512,
+--      BEG_ADDR    => 16#00_0000#,
+--      END_ADDR    => 16#FF_FFFF#,
+--      BEG_TEST_0  => 16#00_0000#,
+--      END_TEST_0  => 16#7F_FFFF#,
+--      BEG_TEST_1  => 16#80_0000#,
+--      END_TEST_1  => 16#FF_FFFF#
+--      )
+--    port map(
+--      sw2_n    	=> sw2,
+--      clk         => clk,
+--      sclkfb      => sclkfb,
+--      sclk        => sclk,
+--      cke         => cke,
+--      cs_n        => cs_n,	
+--      ras_n       => ras_n,
+--      cas_n       => cas_n,
+--      we_n        => we_n,
+--      ba          => ba,
+--      sAddr       => sAddr,
+--      sData       => sData,
+--      dqmh        => dqmh,
+--      dqml        => dqml,
+--		hdout1		=> hdout1,
+--		done1			=> done1,
+--		done0			=> done0,
+--		haddr1		=> haddr1,
+--		hdin0			=> hdin0,
+--		haddr0		=> haddr0,
+--		wr0 			=> wr0,
+--		rd1			=> rd1,
+--		earlyBegun0 => earlyBegun0,
+--		earlyBegun1 => earlyBegun1,
+--		clk_i			=> clk_i
+--      );
 
 end arch;
 

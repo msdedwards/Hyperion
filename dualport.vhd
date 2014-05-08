@@ -814,7 +814,7 @@ entity dualport is
   generic(
     PIPE_EN         :    boolean                       := false;  -- enable pipelined read operations
     PORT_TIME_SLOTS :    std_logic_vector(15 downto 0) := "1111000011110000";
-    DATA_WIDTH      :    natural                       := 16;  -- host & SDRAM data width
+    DATA_WIDTH      :    natural                       := 8;  -- host & SDRAM data width
     HADDR_WIDTH     :    natural                       := 23  -- host-side address width
     );
   port(
