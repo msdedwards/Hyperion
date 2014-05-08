@@ -47,7 +47,7 @@ architecture Behavioral of AVR is
 				MEMOP				: in std_logic;	
 				DATWRITE			: in std_logic;	
 				REGSRC 			: in std_logic_vector(1 downto 0);
-				statusSignals 	: out std_logic_vector(7 downto 0);
+				statusSignals 	: inout std_logic_vector(7 downto 0);
 				op					: out std_logic_vector(3 downto 0);
 				instr 			: out std_logic_vector(15 downto 0)
 			);
