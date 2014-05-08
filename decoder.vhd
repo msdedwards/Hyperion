@@ -20,6 +20,65 @@ begin
 	nib2 <= instr(11 downto 8);
 	nib1 <= instr(15 downto 12);
 	
+	getop: process(nib1, nib2, nib3, nib4)
+	begin
+		case nib1 is
+			when "0000" => op <= "0000";
+			when "0001" =>
+				if (nib2(3) = '0') then
+					op <= "0001";
+				else
+					op <= "0011";
+				end if;
+			when "0010" =>
+				case nib2(3 downto 2) is
+					when "00" => op <= "0011";
+					when "01" => op <= "0100";
+					when "10" => op <= "0101";
+					when "11" => op <= "0110";
+					when others => op <= "----";
+				end case;
+			when "1000" =>
+				if (nib2(1) = '0') then
+					op <= "0111";
+				else
+					op <= "1000";
+				end if;
+			when "1110" => op <= "1001";
+			when "1111" =>
+				if (nib2(2) = '0') then
+					op <= "1010";
+				else
+					op <= "1011";
+				end if;
+			when others =>
+				op <= "----";
+		end case;
+	end process;
+	
+	getaddrs: process(nib1,nib2, nib3, nib4)
+	begin
+		case nib1 is
+			when "0000" | "0001" | "0010" => -- add, cp, sub, and, eor, or, mov
+				a1 <= nib2(1) & nib4;
+				a2 <= nib2(0) & nib3;
+			when "1110" => -- LDI 
+				a1 <= "-----";
+				a2 <= "1" & nib3;
+			when "1000" =>
+				if (nib2(1) = '1') then -- ST (z)
+					a1 <= "-----";
+					a2 <= nib2(0) & nib3;
+				elsif (nib2(1) = '0') then -- LD (z)
+					a1 <= nib2(0) & nib3;
+					a2 <= "-----";
+				end if;
+			when others =>
+				a1 <= "-----";
+				a2 <= "-----";
+			end case;
+	end process;
+	
 	getimm: process(nib1, nib2, nib4)
 	begin
 		case nib1 is
