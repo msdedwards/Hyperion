@@ -47,12 +47,26 @@ entity mux4 is -- four-input multiplexer
        y:      out STD_LOGIC_VECTOR(width-1 downto 0));
 end;
 
-
-
+library IEEE; 
+use IEEE.STD_LOGIC_1164.all;
+entity pc is -- program counter
+  port(clk_in: 	 in std_logic;
+       pc_in:      in  STD_LOGIC_VECTOR(15 downto 0);
+       pc_out:      out STD_LOGIC_VECTOR(15 downto 0));
+end;
 
 architecture behave of adder is
 begin
   y <= a + b;
+end;
+
+architecture behave of pc is 
+begin
+	process(clk_in) begin
+		if clk_in'event and clk_in = '0' then
+			pc_out <= pc_in;
+		end if;
+	end process;
 end;
 
 architecture behave of mux2 is

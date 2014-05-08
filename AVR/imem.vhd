@@ -20,7 +20,8 @@ use IEEE.NUMERIC_STD.all;
 
 entity imem is -- instruction memory
   port(a:  in  STD_LOGIC_VECTOR(15 downto 0);
-       rd: out STD_LOGIC_VECTOR(15 downto 0));
+       rd: out STD_LOGIC_VECTOR(15 downto 0);
+		 pc_out: in std_logic_vector(15 downto 0));
 end;
 
 architecture behave of imem is
