@@ -30,7 +30,7 @@ entity DataPathUnit is
 			REGSRC 			: in std_logic_vector(1 downto 0);
 			statusSignals 	: inout std_logic_vector(7 downto 0);
 			op					: out std_logic_vector(3 downto 0);
-			instr 			: in std_logic_vector(15 downto 0)
+			instr 			: out std_logic_vector(15 downto 0)
 		);						
 end DataPathUnit;
 
@@ -83,8 +83,13 @@ architecture Behavioral of DataPathUnit is
 			 y:    out STD_LOGIC_VECTOR(width-1 downto 0));
 	end component adder;
 	
+	component imem is -- instruction memory
+	port(a:  in  STD_LOGIC_VECTOR(15 downto 0);
+       rd: out STD_LOGIC_VECTOR(15 downto 0));
+	end component;
+	
 	signal imm,srcA,srcB,writeData,memData,result: std_logic_vector(7 downto 0);
-	signal pc,pcPlusOne,pcJump,ZeroExtImm: std_logic_vector(15 downto 0);
+	signal pc,pcPlusOne,pcJump,ZeroExtImm, iMemOut: std_logic_vector(15 downto 0);
 	signal addr1,addr2:std_logic_vector(4 downto 0);
 	signal aluControl: std_logic_vector(2 downto 0);
 begin
@@ -129,7 +134,7 @@ begin
 	dec: Decoder 
 	port map 
 	(
-		instr => instr,
+		instr => iMemOut,
 		imm => imm,
 		a1 => addr1,
 		a2 => addr2,
@@ -157,6 +162,12 @@ begin
 		rd2 => srcB,
 		md => memData
 	);
-
+	instrmem: imem
+	port map
+	(
+		a => "XXXXXXXXXXXXXXXX", -- address from regfile goes here
+		rd => iMemOut
+	);
+	instr <= iMemOut;
 end Behavioral;
 

@@ -23,8 +23,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity AVR is
 	port( clk 	: in std_logic;
-			reset : in std_logic;
-			instr : in std_logic_vector(15 downto 0)
+			reset : in std_logic
 	);
 end AVR;
 
@@ -50,7 +49,7 @@ architecture Behavioral of AVR is
 				REGSRC 			: in std_logic_vector(1 downto 0);
 				statusSignals 	: out std_logic_vector(7 downto 0);
 				op					: out std_logic_vector(3 downto 0);
-				instr 			: in std_logic_vector(15 downto 0)
+				instr 			: out std_logic_vector(15 downto 0)
 			);
 	end component DataPathUnit;
 	component StatusRegister
@@ -69,6 +68,7 @@ architecture Behavioral of AVR is
 	signal REGSRC : std_logic_vector(1 downto 0);
 	signal statusSignalsIn:std_logic_vector(7 downto 0);
 	signal statusSignalsOut:std_logic_vector(7 downto 0);
+	signal iMemOut:std_logic_vector(15 downto 0);
 	
 	
 
@@ -96,7 +96,7 @@ begin
 		REGSRC => REGSRC,
 		statusSignals => statusSignalsOut,
 		op => op,
-		instr => instr
+		instr => iMemOut
 	);
 	sr: StatusRegister 
 	port map
