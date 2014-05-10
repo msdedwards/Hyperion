@@ -22,6 +22,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity DataPathUnit is 
 		port(
+			clkMaster		: out std_logic;
 			clk 				: in std_logic;
 			PCSRC				: in std_logic;
 			REGWRITE			: in std_logic;
@@ -67,6 +68,7 @@ architecture Behavioral of DataPathUnit is
 	end component regfile;
 	component DataMemory is
 		port(
+			clkMaster: out std_logic;
 			DatWrite: in std_logic;
 			addr: in std_logic_vector(15 downto 0);
 			dataIn: in std_logic_vector(7 downto 0)
@@ -169,6 +171,7 @@ begin
 	dm : DataMemory
 	port map
 	(	
+		clkMaster => clkMaster,
 		DatWrite => DATWRITE,
 		addr => dataMemoryAddr,
 		dataIn => memData

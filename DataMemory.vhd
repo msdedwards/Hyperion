@@ -31,6 +31,7 @@ use WORK.common.all;
 
 entity DataMemory is
 	port(
+		clkMaster: out std_logic;
 		DatWrite: in std_logic;
 		addr: in std_logic_vector(15 downto 0);
 		dataIn: in std_logic_vector(7 downto 0)
@@ -40,11 +41,13 @@ end DataMemory;
 architecture Behavioral of DataMemory is
 	signal pinsIn: SDRAMControlPinsIn;
 	signal pinsOut: SDRAMControlPinsOut;
-	signal pinsInout:SDRAMControlPinsInOut;
-	signal clk_i: std_logic;
-	signal haddr0,haddr1: std_logic_vector(15 downto 0);
+	signal pinsInOut:SDRAMControlPinsInOut;
+	--signal clk_i: std_logic;
+	--signal haddr0,haddr1: std_logic_vector(15 downto 0);
 	
 begin
+	clkMaster <= pinsInOut.clk_i;
+	
 	mem:SDRAM_Component
 	generic map(
 		HADDR_WIDTH => 16,
