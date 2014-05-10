@@ -206,8 +206,8 @@ architecture arch of test_dualport_core is
   signal done                   						: std_logic;  -- read/write operation complete indicator
   signal rdDone             							: std_logic;  -- read operation complete indicator
   signal hAddr                						: std_logic_vector(HADDR_WIDTH-1 downto 0);  -- host-side address bus
-  signal hDIn                   						: std_logic_vector(HADDR_WIDTH-1 downto 0);  -- host-side data to SDRAM
-  signal hDOut                						: std_logic_vector(HADDR_WIDTH-1 downto 0);  -- host-side data from SDRAM
+  signal hDIn                   						: std_logic_vector(7 downto 0);  -- host-side data to SDRAM
+  signal hDOut                						: std_logic_vector(7 downto 0);  -- host-side data from SDRAM
   signal rd                         				: std_logic;  -- host-side read control signal
   signal wr                         				: std_logic;  -- host-side write control signal
   signal rst												: std_logic;
@@ -257,7 +257,7 @@ begin
     generic map(
       PIPE_EN         => PIPE_EN,
       PORT_TIME_SLOTS => PORT_TIME_SLOTS,
-      --DATA_WIDTH      => DATA_WIDTH,
+      DATA_WIDTH      => 8,
       HADDR_WIDTH     => HADDR_WIDTH
       )
     port map(
@@ -315,7 +315,7 @@ begin
       DATA_WIDTH   => 8,
       NROWS        => NROWS,
       NCOLS        => NCOLS,
-      HADDR_WIDTH  => 16,
+      HADDR_WIDTH  => 24,
       SADDR_WIDTH  => 13
       )
     port map(

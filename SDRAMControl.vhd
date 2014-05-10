@@ -54,10 +54,10 @@ package SDRAMControl is
 		wr1			: std_logic;
 		rd0			: std_logic;
 		rd1			: std_logic;
-		hdin0			: std_logic_vector(15 downto 0);
-		hdin1			: std_logic_vector(15 downto 0);
-		haddr0		: std_logic_vector(7 downto 0);
-		haddr1		: std_logic_vector(7 downto 0);
+		hdin0			: std_logic_vector(7 downto 0);
+		hdin1			: std_logic_vector(7 downto 0);
+		haddr0		: std_logic_vector(23 downto 0);
+		haddr1		: std_logic_vector(23 downto 0);
 	end record SDRAMControlPinsIn;
 	
 	type SDRAMControlPinsInOut is record
