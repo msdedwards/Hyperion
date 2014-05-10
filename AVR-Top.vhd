@@ -31,7 +31,9 @@ end AVRTop;
 
 architecture Behavioral of AVRTop is
 	component AVR is
-		port( clk 	: in std_logic;
+		port( 
+				clkMaster:out std_logic;
+				clk 	: in std_logic;
 				reset : in std_logic;
 				instr : in std_logic_vector(15 downto 0)
 		);

@@ -64,4 +64,17 @@ package SDRAMControl is
 		sData			: std_logic_vector(7 downto 0);
 		clk_i			: std_logic;
 	end record SDRAMControlPinsInOut;
+	
+--			cke     : std_logic;                        -- SDRAM clock-enable
+--      cs_n    : std_logic;                        -- SDRAM chip-select
+--      ras_n   : std_logic;                        -- SDRAM RAS
+--      cas_n   : std_logic;                        -- SDRAM CAS     
+--      we_n    : std_logic;                        -- SDRAM write-enable
+--      ba      : std_logic_vector( 1 downto 0);    -- SDRAM bank-address selects one of four banks
+--      dqmh    : std_logic;                        -- SDRAM DQMH controls upper half of data bus during read
+--      dqml    : std_logic;                        -- SDRAM DQML controls lower half of data bus during read   
+--sdram_clock_in_sclkfb : in    std_logic;         -- SDRAM clock feedback from SDRAM after PCB delays
+--    sdram_clock_out_sclk  : out   std_logic;         -- SDRAM clock derived from master clock
+--sAddr  : out   std_logic_vector(12 downto 0);    -- SDRAM address bus
+--	 sData  : inout std_logic_vector(15 downto 0);    -- data bus to/from SDRAM
 end package SDRAMControl;    

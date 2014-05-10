@@ -22,7 +22,9 @@ library work;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity AVR is
-	port( clk 	: in std_logic;
+	port( 
+			clkMaster: out std_logic;
+			clk 	: in std_logic;
 			reset : in std_logic;
 			instr : in std_logic_vector(15 downto 0)
 	);
@@ -42,6 +44,7 @@ architecture Behavioral of AVR is
 	end component;
 	component DataPathUnit
 			port(
+				clkMaster		: out std_logic;
 				clk 				: in std_logic;
 				PCSRC				: in std_logic;
 				REGWRITE			: in std_logic;
