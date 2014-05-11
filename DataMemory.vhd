@@ -80,7 +80,10 @@ package DataMemorypkg is
 end package DataMemorypkg;
 
 architecture Behavioral of DataMemory is
-	
+	signal clk_i: std_logic;
+	signal earlyBegun1, earlyBegun0, rd1,wr0,done0,done1:std_logic;
+	signal hdin0,hdin1,hdout1,hdout0: std_logic_vector(7 downto 0);
+	signal haddr1,haddr0:std_logic_vector(15 downto 0);
 begin
 	
 	mem:SDRAM_Component
@@ -91,8 +94,8 @@ begin
 	port map(
 		 sw2_n => sw2_n,   	-- active-low pushbutton input
 		 clk => clk,   	-- main clock input from external clock source
-		 sdram_clock_in_sclkfb => sdram_clock_in_sclkfb, 	-- feedback SDRAM clock with PCB delays
-		 sdram_clock_out_sclk => sdram_clock_out_sclk,
+		 sclkfb => sdram_clock_in_sclkfb, 	-- feedback SDRAM clock with PCB delays
+		 sclk => sdram_clock_out_sclk,
 		 cke => cke,  	-- SDRAM clock-enable
 		 cs_n => cs_n,  	-- SDRAM chip-select
 		 ras_n => ras_n, 	-- SDRAM RAS

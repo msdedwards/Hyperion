@@ -12,7 +12,7 @@ package sdram is
       MAX_NOP              :     natural := 10000;  -- number of NOPs before entering self-refresh
       ENABLE_REFRESH       :     boolean := true;   -- if true, row refreshes are automatically inserted
       MULTIPLE_ACTIVE_ROWS :     boolean := false;  -- if true, allow an active row in each bank
-      DATA_WIDTH           :     natural := 8;  -- host & SDRAM data width
+      DATA_WIDTH           :     natural := 16;  -- host & SDRAM data width
       NROWS                :     natural := 4096;  -- number of rows in SDRAM array
       NCOLS                :     natural := 512;  -- number of columns in SDRAM array
       HADDR_WIDTH          :     natural := 23;  -- host-side address width
@@ -55,8 +55,8 @@ package sdram is
     generic(
       PIPE_EN         :    boolean                       := false;  -- enable pipelined read operations
       PORT_TIME_SLOTS :    std_logic_vector(15 downto 0) := "1111000011110000";
-      DATA_WIDTH      :    natural                       := 8;  -- host & SDRAM data width
-      HADDR_WIDTH     :    natural                       := 24  -- host-side address width
+      DATA_WIDTH      :    natural                       := 16;  -- host & SDRAM data width
+      HADDR_WIDTH     :    natural                       := 23  -- host-side address width
       );
     port(
       clk             : in std_logic;   -- master clock
@@ -814,7 +814,7 @@ entity dualport is
   generic(
     PIPE_EN         :    boolean                       := false;  -- enable pipelined read operations
     PORT_TIME_SLOTS :    std_logic_vector(15 downto 0) := "1111000011110000";
-    DATA_WIDTH      :    natural                       := 8;  -- host & SDRAM data width
+    DATA_WIDTH      :    natural                       := 16;  -- host & SDRAM data width
     HADDR_WIDTH     :    natural                       := 23  -- host-side address width
     );
   port(

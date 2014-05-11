@@ -71,44 +71,41 @@ package test_dualport_core_pckg is
       PORT_TIME_SLOTS :       std_logic_vector(15 downto 0) := "1111111111110000"
       );
     port(
-		pinsIn			 :	in		SDRAMControlPinsIn;
-		pinsOut			 : out	SDRAMControlPinsOut;
-		pinsInOut		 : inout	SDRAMControlPinsInOut
---      clk             : in    std_logic;  -- main clock input from external clock source
---		sw2_n			  	 : in	 	std_logic;  -- active-low pushbutton input
---		sclkfb          : in    std_logic;  -- feedback SDRAM clock with PCB delays
---		sclk            : out   std_logic;  -- clock to SDRAM
---		cke             : out   std_logic;  -- SDRAM clock-enable
---		cs_n            : out   std_logic;  -- SDRAM chip-select
---		ras_n           : out   std_logic;  -- SDRAM RAS
---		cas_n           : out   std_logic;  -- SDRAM CAS
---		we_n            : out   std_logic;  -- SDRAM write-enable
---		ba              : out   std_logic_vector(1 downto 0);  -- SDRAM bank-address
---		sAddr           : out   std_logic_vector(12 downto 0);  -- SDRAM address bus
---		sData           : inout std_logic_vector(7 downto 0);  -- data bus to/from SDRAM
---		dqmh            : out   std_logic;  -- SDRAM DQMH
---		dqml            : out   std_logic;  -- SDRAM DQML
---		hdout0 			 : out	std_logic_vector(7 downto 0);
---		hdout1			 : out 	std_logic_vector(7 downto 0);
-----		done1				 : out 	std_logic;
---		done0				 : out	std_logic;
---		hdin0				 : in 	std_logic_vector(7 downto 0);
---		hdin1				 : in  	std_logic_vector(7 downto 0);
---		haddr1			 : in	   std_logic_vector(15 downto 0);
---		haddr0			 : in 	std_logic_vector(15 downto 0);
---		wr0				 : in		std_logic;
---		wr1 				 : in		std_logic;
---		rd0				 : in 	std_logic;
---		rd1				 : in 	std_logic;
---		earlyBegun0		 : out	std_logic;
---		earlyBegun1		 : out	std_logic;
---		begun0			 : out	std_logic;
---		begun1			 : out	std_logic;
---		rdPending0		 : out	std_logic;
---		rdPending1		 : out 	std_logic;
---		rdDone0			 : out 	std_logic;
---		rdDone1			 : out 	std_logic;
---		clk_i				 : inout	std_logic
+      clk             : in    std_logic;  -- main clock input from external clock source
+		sw2_n			  	 : in	 	std_logic;  -- active-low pushbutton input
+		sclkfb          : in    std_logic;  -- feedback SDRAM clock with PCB delays
+		sclk            : out   std_logic;  -- clock to SDRAM
+		cke             : out   std_logic;  -- SDRAM clock-enable
+		cs_n            : out   std_logic;  -- SDRAM chip-select
+		ras_n           : out   std_logic;  -- SDRAM RAS
+		cas_n           : out   std_logic;  -- SDRAM CAS
+		we_n            : out   std_logic;  -- SDRAM write-enable
+		ba              : out   std_logic_vector(1 downto 0);  -- SDRAM bank-address
+		sAddr           : out   std_logic_vector(SADDR_WIDTH downto 0);  -- SDRAM address bus
+		sData           : inout std_logic_vector(DATA_WIDTH downto 0);  -- data bus to/from SDRAM
+		dqmh            : out   std_logic;  -- SDRAM DQMH
+		dqml            : out   std_logic;  -- SDRAM DQML
+		hdout0 			 : out	std_logic_vector(DATA_WIDTH downto 0);
+		hdout1			 : out 	std_logic_vector(DATA_WIDTH downto 0);
+		done1				 : out 	std_logic;
+		done0				 : out	std_logic;
+		hdin0				 : in 	std_logic_vector(DATA_WIDTH downto 0);
+		hdin1				 : in  	std_logic_vector(DATA_WIDTH downto 0);
+		haddr1			 : in	   std_logic_vector(HADDR_WIDTH downto 0);
+		haddr0			 : in 	std_logic_vector(HADDR_WIDTH downto 0);
+		wr0				 : in		std_logic;
+		wr1 				 : in		std_logic;
+		rd0				 : in 	std_logic;
+		rd1				 : in 	std_logic;
+		earlyBegun0		 : out	std_logic;
+		earlyBegun1		 : out	std_logic;
+		begun0			 : out	std_logic;
+		begun1			 : out	std_logic;
+		rdPending0		 : out	std_logic;
+		rdPending1		 : out 	std_logic;
+		rdDone0			 : out 	std_logic;
+		rdDone1			 : out 	std_logic;
+		clk_i				 : inout	std_logic
       );
   end component test_dualport_core;
 end package test_dualport_core_pckg;
@@ -128,65 +125,63 @@ use Work.SDRAMControl.all;
 
 entity test_dualport_core is
   generic(
-    FREQ            :       natural                       := 50_000;  -- frequency of operation in KHz
-    CLK_DIV         :       real                          := 1.0;  -- divisor for FREQ (can only be 1.5, 2.0, 2.5, 3.0, 4.0, 5.0, 8.0 or 16.0)
-    PIPE_EN         :       boolean                       := true;  -- enable fast, pipelined SDRAM operation
-    --DATA_WIDTH      :       natural                       := 16;  -- SDRAM data width
-    --SADDR_WIDTH     :       natural                       := 13;  -- SDRAM row/col address width
-    NROWS           :       natural                       := 4096;  -- number of rows in the SDRAM
-    NCOLS           :       natural                       := 256;  -- number of columns in each SDRAM row
-    -- beginning and ending addresses for the entire SDRAM
-    BEG_ADDR        :       natural                       := 16#00_0000#;
-    END_ADDR        :       natural                       := 16#3F_FFFF#;
-	 HADDR_WIDTH 	 :			natural								:= log2(16#FF_FFFF#);
-    -- beginning and ending address for the memory tester attached to port 0
-    BEG_TEST_0      :       natural                       := 16#00_0000#;
-    END_TEST_0      :       natural                       := 16#1F_FFFF#;
-    -- beginning and ending address for the memory tester attached to port 1
-    BEG_TEST_1      :       natural                       := 16#20_0000#;
-    END_TEST_1      :       natural                       := 16#3F_FFFF#;
-    -- allocate time slots between ports 0 and 1.  Port 1 gets 3/4 of the bandwidth, port 0 gets 1/4.
-    PORT_TIME_SLOTS :       std_logic_vector(15 downto 0) := "1111111111110000"
-    );
-  port(
-		pinsIn			 :	in		SDRAMControlPinsIn;
-		pinsOut			 : out	SDRAMControlPinsOut;
-		pinsInOut		 : inout	SDRAMControlPinsInOut
---      clk             : in    std_logic;  -- main clock input from external clock source
---		sw2_n			  	 : in	 	std_logic;  -- active-low pushbutton input
---		sclkfb          : in    std_logic;  -- feedback SDRAM clock with PCB delays
---		sclk            : out   std_logic;  -- clock to SDRAM
---		cke             : out   std_logic;  -- SDRAM clock-enable
---		cs_n            : out   std_logic;  -- SDRAM chip-select
---		ras_n           : out   std_logic;  -- SDRAM RAS
---		cas_n           : out   std_logic;  -- SDRAM CAS
---		we_n            : out   std_logic;  -- SDRAM write-enable
---		ba              : out   std_logic_vector(1 downto 0);  -- SDRAM bank-address
---		sAddr           : out   std_logic_vector(12 downto 0);  -- SDRAM address bus
---		sData           : inout std_logic_vector(7 downto 0);  -- data bus to/from SDRAM
---		dqmh            : out   std_logic;  -- SDRAM DQMH
---		dqml            : out   std_logic;  -- SDRAM DQML
---		hdout0 			 : out	std_logic_vector(7 downto 0);
---		hdout1			 : out 	std_logic_vector(7 downto 0);
-----		done1				 : out 	std_logic;
---		done0				 : out	std_logic;
---		hdin0				 : in 	std_logic_vector(7 downto 0);
---		hdin1				 : in  	std_logic_vector(7 downto 0);
---		haddr1			 : in	   std_logic_vector(15 downto 0);
---		haddr0			 : in 	std_logic_vector(15 downto 0);
---		wr0				 : in		std_logic;
---		wr1 				 : in		std_logic;
---		rd0				 : in 	std_logic;
---		rd1				 : in 	std_logic;
---		earlyBegun0		 : out	std_logic;
---		earlyBegun1		 : out	std_logic;
---		begun0			 : out	std_logic;
---		begun1			 : out	std_logic;
---		rdPending0		 : out	std_logic;
---		rdPending1		 : out 	std_logic;
---		rdDone0			 : out 	std_logic;
---		rdDone1			 : out 	std_logic;
---		clk_i				 : inout	std_logic
+      FREQ            :       natural                       := 50_000;  -- frequency of operation in KHz
+      CLK_DIV         :       real                          := 1.0;  -- divisor for FREQ (can only be 1.5, 2.0, 2.5, 3.0, 4.0, 5.0, 8.0 or 16.0)
+      PIPE_EN         :       boolean                       := true;  -- enable fast, pipelined SDRAM operation
+      DATA_WIDTH      :       natural                       := 16;  -- SDRAM data width
+      SADDR_WIDTH     :       natural                       := 13;  -- SDRAM row/col address width
+      NROWS           :       natural                       := 4096;  -- number of rows in the SDRAM
+      NCOLS           :       natural                       := 256;  -- number of columns in each SDRAM row
+		
+      -- beginning and ending addresses for the entire SDRAM
+      BEG_ADDR        :       natural                       := 16#00_0000#;
+      END_ADDR        :       natural                       := 16#3F_FFFF#;
+		HADDR_WIDTH 	 :			natural								:= log2(16#FF_FFFF#);
+      -- beginning and ending address for the memory tester attached to port 0
+      BEG_TEST_0      :       natural                       := 16#00_0000#;
+      END_TEST_0      :       natural                       := 16#1F_FFFF#;
+      -- beginning and ending address for the memory tester attached to port 1
+      BEG_TEST_1      :       natural                       := 16#20_0000#;
+      END_TEST_1      :       natural                       := 16#3F_FFFF#;
+      -- allocate time slots between ports 0 and 1.  Port 1 gets 3/4 of the bandwidth, port 0 gets 1/4.
+      PORT_TIME_SLOTS :       std_logic_vector(15 downto 0) := "1111111111110000"
+      );
+    port(
+		clk             : in    std_logic;  -- main clock input from external clock source
+		sw2_n			  	 : in	 	std_logic;  -- active-low pushbutton input
+		sclkfb          : in    std_logic;  -- feedback SDRAM clock with PCB delays
+		sclk            : out   std_logic;  -- clock to SDRAM
+		cke             : out   std_logic;  -- SDRAM clock-enable
+		cs_n            : out   std_logic;  -- SDRAM chip-select
+		ras_n           : out   std_logic;  -- SDRAM RAS
+		cas_n           : out   std_logic;  -- SDRAM CAS
+		we_n            : out   std_logic;  -- SDRAM write-enable
+		ba              : out   std_logic_vector(1 downto 0);  -- SDRAM bank-address
+		sAddr           : out   std_logic_vector(SADDR_WIDTH downto 0);  -- SDRAM address bus
+		sData           : inout std_logic_vector(DATA_WIDTH downto 0);  -- data bus to/from SDRAM
+		dqmh            : out   std_logic;  -- SDRAM DQMH
+		dqml            : out   std_logic;  -- SDRAM DQML
+		hdout0 			 : out	std_logic_vector(DATA_WIDTH downto 0);
+		hdout1			 : out 	std_logic_vector(DATA_WIDTH downto 0);
+		done1				 : out 	std_logic;
+		done0				 : out	std_logic;
+		hdin0				 : in 	std_logic_vector(DATA_WIDTH downto 0);
+		hdin1				 : in  	std_logic_vector(DATA_WIDTH downto 0);
+		haddr1			 : in	   std_logic_vector(HADDR_WIDTH downto 0);
+		haddr0			 : in 	std_logic_vector(HADDR_WIDTH downto 0);
+		wr0				 : in		std_logic;
+		wr1 				 : in		std_logic;
+		rd0				 : in 	std_logic;
+		rd1				 : in 	std_logic;
+		earlyBegun0		 : out	std_logic;
+		earlyBegun1		 : out	std_logic;
+		begun0			 : out	std_logic;
+		begun1			 : out	std_logic;
+		rdPending0		 : out	std_logic;
+		rdPending1		 : out 	std_logic;
+		rdDone0			 : out 	std_logic;
+		rdDone1			 : out 	std_logic;
+		clk_i				 : inout	std_logic
     );
 end entity;
 
@@ -215,6 +210,7 @@ architecture arch of test_dualport_core is
   -- status signals from the memory testers connected to port0 and port1
   signal progress0, progress1 						: std_logic_vector(1 downto 0);  -- test progress indicator
   signal err0, err1           						: std_logic;  -- test error flag
+  signal haddr0Ext										: std_logic_vector(22 downto 0);
 
   -- set the reset flag upon startup
   attribute INIT          : string;
@@ -246,7 +242,7 @@ begin
   process(clk_b)
   begin
     if rising_edge(clk_b) then
-      syncButton <= not(pinsIn.sw2_n) & syncButton(syncButton'high downto 1);
+      syncButton <= not(sw2_n) & syncButton(syncButton'high downto 1);
     end if;
   end process;
 
@@ -261,32 +257,32 @@ begin
       HADDR_WIDTH     => HADDR_WIDTH
       )
     port map(
-      clk             => pinsInOut.clk_i,
+      clk             => clk_i,
       -- memory tester port 0 connections
       rst0            => rst_i,
-      rd0             => pinsIn.rd0,
-      wr0             => pinsIn.wr0,
-      rdPending0      => pinsOut.rdPending0,
-      opBegun0        => pinsOut.begun0,
-      earlyOpBegun0   => pinsOut.earlyBegun0,
-      rdDone0         => pinsOut.rdDone0,
-      done0           => pinsOut.done0,
-      hAddr0          => pinsIn.hAddr0,
-      hDIn0           => pinsIn.hDIn0,
-      hDOut0          => pinsOut.hDOut0,
+      rd0             => rd0,
+      wr0             => wr0,
+      rdPending0      => rdPending0,
+      opBegun0        => begun0,
+      earlyOpBegun0   => earlyBegun0,
+      rdDone0         => rdDone0,
+      done0           => done0,
+      hAddr0          => hAddr0,
+      hDIn0           => hDIn0,
+      hDOut0          => hDOut0,
       status0         => open,
       -- memory tester port 1 connections
       rst1            => rst_i,
-      rd1             => pinsIn.rd1,
-      wr1             => pinsIn.wr1,
-      rdPending1      => pinsOut.rdPending1,
-      opBegun1        => pinsOut.begun1,
-      earlyOpBegun1   => pinsOut.earlyBegun1,
-      rdDone1         => pinsOut.rdDone1,
-      done1           => pinsOut.done1,
-      hAddr1          => pinsIn.hAddr1,
-      hDIn1           => pinsIn.hDIn1,
-      hDOut1          => pinsOut.hDOut1,
+      rd1             => rd1,
+      wr1             => wr1,
+      rdPending1      => rdPending1,
+      opBegun1        => begun1,
+      earlyOpBegun1   => earlyBegun1,
+      rdDone1         => rdDone1,
+      done1           => done1,
+      hAddr1          => hAddr1,
+      hDIn1           => hDIn1,
+      hDOut1          => hDOut1,
       status1         => open,
       -- connections to the SDRAM controller
       rst             => rst,
@@ -319,9 +315,9 @@ begin
       SADDR_WIDTH  => 13
       )
     port map(
-      clk          => pinsIn.clk,              -- master clock from external clock source (unbuffered)
+      clk          => clk,              -- master clock from external clock source (unbuffered)
       bufclk       => clk_b,            -- buffered master clock output
-      clk1x        => pinsInOut.clk_i,            -- synchronized master clock (accounts for delays to external SDRAM)
+      clk1x        => clk_i,            -- synchronized master clock (accounts for delays to external SDRAM)
       clk2x        => open,             -- synchronized doubled master clock
       lock         => lock,             -- DLL lock indicator
       rst          => rst,              -- reset
@@ -336,18 +332,18 @@ begin
       hDIn         => hDIn,             -- test data pattern from dualport to SDRAM
       hDOut        => hDOut,            -- SDRAM data output to dualport
       status       => status,           -- SDRAM controller state (for diagnostics)
-      sclkfb       => pinsIn.sclkfb,           -- clock feedback with added external PCB delays
-      sclk         => pinsOut.sclk,             -- synchronized clock to external SDRAM
-      cke          => pinsOut.cke,              -- SDRAM clock enable
-      cs_n         => pinsOut.cs_n,             -- SDRAM chip-select
-      ras_n        => pinsOut.ras_n,            -- SDRAM RAS
-      cas_n        => pinsOut.cas_n,            -- SDRAM CAS
-      we_n         => pinsOut.we_n,             -- SDRAM write-enable
-      ba           => pinsOut.ba,               -- SDRAM bank address
-      sAddr        => pinsOut.sAddr,            -- SDRAM address
-      sData        => pinsInOut.sData,            -- SDRAM databus
-      dqmh         => pinsOut.dqmh,             -- SDRAM DQMH
-      dqml         => pinsOut.dqml              -- SDRAM DQML
+      sclkfb       => sclkfb,           -- clock feedback with added external PCB delays
+      sclk         => sclk,             -- synchronized clock to external SDRAM
+      cke          => cke,              -- SDRAM clock enable
+      cs_n         => cs_n,             -- SDRAM chip-select
+      ras_n        => ras_n,            -- SDRAM RAS
+      cas_n        => cas_n,            -- SDRAM CAS
+      we_n         => we_n,             -- SDRAM write-enable
+      ba           => ba,               -- SDRAM bank address
+      sAddr        => sAddr,            -- SDRAM address
+      sData        => sData,            -- SDRAM databus
+      dqmh         => dqmh,             -- SDRAM DQMH
+      dqml         => dqml              -- SDRAM DQML
       );
 
 
