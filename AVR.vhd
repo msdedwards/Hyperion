@@ -20,49 +20,64 @@
 library IEEE;
 library work;
 use IEEE.STD_LOGIC_1164.ALL;
+use work.ControlUnitpkg.all;
+use work.DataPathUnitpkg.all;
+use work.StatusRegisterpkg.all;
 
 entity AVR is
 	port( 
-			clkMaster: out std_logic;
-			clk 	: in std_logic;
-			reset : in std_logic;
-			instr : in std_logic_vector(15 downto 0)
+				clk							: 	in		std_logic;
+				reset							: 	in 	std_logic;
+				sw2_n							:	in		std_logic;
+				pps							:	out	std_logic_vector(6 downto 3);
+				led							: 	out	std_logic_vector(6 downto 0);
+				sdram_clock_in_sclkfb 	:	in		std_logic;
+				sdram_clock_out_sclk		:	out	std_logic;
+				cke     						: 	out	std_logic;                        -- SDRAM clock-enable
+				cs_n    						:	out 	std_logic;                        -- SDRAM chip-select
+				ras_n   						:	out 	std_logic;                        -- SDRAM RAS
+				cas_n   						: 	out 	std_logic;                        -- SDRAM CAS     
+				we_n    						: 	out 	std_logic;                        -- SDRAM write-enable
+				ba      						: 	out 	std_logic_vector( 1 downto 0);    -- SDRAM bank-address selects one of four banks
+				dqmh    						: 	out 	std_logic;                        -- SDRAM DQMH controls upper half of data bus during read
+				dqml    						: 	out 	std_logic;
+				sAddr							:	out	std_logic_vector(12 downto 0);
+				sData							: 	inout	std_logic_vector(15 downto 0)
 	);
 end AVR;
 
-architecture Behavioral of AVR is
-	component ControlUnit
-		port(
-			op 				: in std_logic_vector(3 downto 0);
-			PCSRC				: out std_logic;
-			REGWRITE			: out std_logic;
-			MEMOP				: out std_logic;	
-			DATWRITE			: out std_logic;	
-			REGSRC 			: out std_logic_vector(1 downto 0);
-			statusSignals 	: in std_logic_vector(7 downto 0)
-		);
-	end component;
-	component DataPathUnit
-			port(
-				clkMaster		: out std_logic;
-				clk 				: in std_logic;
-				PCSRC				: in std_logic;
-				REGWRITE			: in std_logic;
-				MEMOP				: in std_logic;	
-				DATWRITE			: in std_logic;	
-				REGSRC 			: in std_logic_vector(1 downto 0);
-				statusSignals 	: out std_logic_vector(7 downto 0);
-				op					: out std_logic_vector(3 downto 0);
-				instr 			: in std_logic_vector(15 downto 0)
-			);
-	end component DataPathUnit;
-	component StatusRegister
-		port(
-			currentValue 	: in std_logic_vector(7 downto 0);
-			nextValue		: out std_logic_vector(7 downto 0)
-		);
-	end component;
+library IEEE;
+library work;
+use IEEE.STD_LOGIC_1164.ALL;
+use work.ControlUnitpkg.all;
+use work.DataPathUnitpkg.all;
+use work.StatusRegisterpkg.all;
 
+package AVRPkg is
+	component AVR is
+		port( 
+				clk							: 	in		std_logic;
+				reset							: 	in 	std_logic;
+				sw2_n							:	in		std_logic;
+				pps							:	out	std_logic_vector(6 downto 3);
+				led							: 	out	std_logic_vector(6 downto 0);
+				sdram_clock_in_sclkfb 	:	in		std_logic;
+				sdram_clock_out_sclk		:	out	std_logic;
+				cke     						: 	out	std_logic;                        -- SDRAM clock-enable
+				cs_n    						:	out 	std_logic;                        -- SDRAM chip-select
+				ras_n   						:	out 	std_logic;                        -- SDRAM RAS
+				cas_n   						: 	out 	std_logic;                        -- SDRAM CAS     
+				we_n    						: 	out 	std_logic;                        -- SDRAM write-enable
+				ba      						: 	out 	std_logic_vector( 1 downto 0);    -- SDRAM bank-address selects one of four banks
+				dqmh    						: 	out 	std_logic;                        -- SDRAM DQMH controls upper half of data bus during read
+				dqml    						: 	out 	std_logic;
+				sAddr							:	out	std_logic_vector(12 downto 0);
+				sData							: 	inout	std_logic_vector(15 downto 0)
+		);
+	end component AVR;
+end package AVRPkg;
+
+architecture Behavioral of AVR is
 
 	signal op: std_logic_vector(3 downto 0);
 	signal PCSRC : std_logic;
@@ -72,9 +87,6 @@ architecture Behavioral of AVR is
 	signal REGSRC : std_logic_vector(1 downto 0);
 	signal statusSignalsIn:std_logic_vector(7 downto 0);
 	signal statusSignalsOut:std_logic_vector(7 downto 0);
-	
-	
-
 
 begin
 	cu: ControlUnit 
@@ -92,15 +104,30 @@ begin
 	port map
 	(
 		clk => clk,
+		reset	=> reset,						
+		sw2_n => sw2_n,							
+		pps => pps,			
+		led => led,				
+		sdram_clock_in_sclkfb => sdram_clock_in_sclkfb,	
+		sdram_clock_out_sclk	=> sdram_clock_out_sclk,
+		cke => cke,
+		cs_n => cs_n,				
+		ras_n => ras_n,				
+		cas_n => cas_n,			
+		we_n => we_n,			
+		ba => ba,				
+		dqmh => dqmh,					
+		dqml => dqml,				
+		sAddr => sAddr,				
+		sData	=> sData,						
 		PCSRC => PCSRC,
 		REGWRITE => REGWRITE,
 		MEMOP => MEMOP,
 		DATWRITE => DATWRITE,
 		REGSRC => REGSRC,
 		statusSignals => statusSignalsOut,
-		op => op,
-		instr => instr
-	);
+		op => op
+		);
 	sr: StatusRegister 
 	port map
 	(

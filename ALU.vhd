@@ -9,6 +9,20 @@ entity alu is -- Arithmetic/Logic unit with add/sub, AND, OR, set less than
 		 statusreg:	 inout STD_LOGIC_VECTOR(7 downto 0));
 end;
 
+library IEEE; 
+use IEEE.STD_LOGIC_1164.all; 
+use IEEE.STD_LOGIC_UNSIGNED.all;
+
+package alupkg is
+	component alu is
+		port (a, b:       in  STD_LOGIC_VECTOR(7 downto 0);
+			 alucontrol: in  STD_LOGIC_VECTOR(2 downto 0);
+			 result:     inout STD_LOGIC_VECTOR(7 downto 0);
+			 statusreg:	 inout STD_LOGIC_VECTOR(7 downto 0)
+		 );
+	end component alu;
+end package alupkg;
+
 architecture behave of alu is
 	signal i,t,h,s,v,n,z,c: std_logic;
 	signal r: std_logic_vector(7 downto 0);

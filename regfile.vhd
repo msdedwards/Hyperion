@@ -12,6 +12,24 @@ entity regfile is
        rd1, rd2, md:  out STD_LOGIC_VECTOR(7 downto 0));
 end;
 
+library IEEE; 
+use IEEE.STD_LOGIC_1164.all; 
+use IEEE.STD_LOGIC_UNSIGNED.all;
+use IEEE.NUMERIC_STD.all;
+
+package regfilepkg is 
+	component regfile is
+		port(
+			clk:           in  STD_LOGIC;
+			RegWrite:      in  STD_LOGIC;
+			MemOp:			 in STD_LOGIC;
+			a1, a2: 		 in  STD_LOGIC_VECTOR(4 downto 0);
+			wd:            in  STD_LOGIC_VECTOR(7 downto 0);
+			rd1, rd2, md:  out STD_LOGIC_VECTOR(7 downto 0)
+		);
+	end component regfile;
+end package regfilepkg;
+
 architecture behave of regfile is
 	type ramtype is array (31 downto 0) of STD_LOGIC_VECTOR(7 downto 0);
 	signal mem: ramtype;

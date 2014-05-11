@@ -30,53 +30,50 @@ package SDRAM_Component_pckg is
 			DATA_WIDTH      : natural 	:= 8
 		);
 		port(
-		 pinsIn				: in		SDRAMControlPinsIn;
-		 pinsOut				: out		SDRAMControlPinsOut;
-		 pinsInOut			: inout	SDRAMControlPinsInOut
---		 sw2    				: in    	std_logic;           				-- active-low pushbutton input
---		 clk    				: in    	std_logic;          					-- main clock input from external clock source
---		 sclkfb 				: in    	std_logic;          					-- feedback SDRAM clock with PCB delays
---		 sclk   				: out   	std_logic;          					-- clock to SDRAM
---		 cke    				: out   	std_logic;          					-- SDRAM clock-enable
---		 cs_n   				: out   	std_logic;          					-- SDRAM chip-select
---		 ras_n  				: out   	std_logic;          					-- SDRAM RAS
---		 cas_n  				: out   	std_logic;          					-- SDRAM CAS
---		 we_n   				: out   	std_logic;          					-- SDRAM write-enable
---		 ba     				: out   	std_logic_vector( 1 downto 0); 	-- SDRAM bank-address
---		 sAddr  				: out   	std_logic_vector(12 downto 0);  	-- SDRAM address bus
---		 sData  				: inout 	std_logic_vector(15 downto 0);  	-- data bus to/from SDRAM
---		 dqmh   				: out   	std_logic;           				-- SDRAM DQMH
---		 dqml   				: out   	std_logic;           				-- SDRAM DQML
---		 hdout0				: out		std_logic_vector(7 downto 0);
---		 hdout1				: out 	std_logic_vector(7 downto 0);
---		 done1				: out 	std_logic;
---		 done0				: out		std_logic;
---		 haddr0				: in 		std_logic_vector(15 downto 0);
---		 haddr1				: in	   std_logic_vector(15 downto 0);
---		 hdin0				: in  	std_logic_vector(7 downto 0);
---		 hdin1				: in 		std_logic_vector(7 downto 0);
---		 wr0 					: in		std_logic;
---		 rd1					: in 		std_logic;
---		 earlyBegun0		: out		std_logic;
---		 earlyBegun1		: out		std_logic;
---		 clk_i				: inout	std_logic
-			 );
-	end component SDRAM_Component;
-end package SDRAM_Component_pckg;
-
-
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use work.common.all;
-use WORK.test_dualport_core_pckg.all;
-use Work.SDRAMControl.all;
-
-
-entity SDRAM_Component is
---	generic(
---		HADDR_WIDTH 	 :			natural	:= log2(16#FF_FFFF#);
---		DATA_WIDTH      :       natural  := 16
---	);
+		 sw2_n    									: in    	std_logic;           				-- active-low pushbutton input
+		 clk    									: in    	std_logic;          					-- main clock input from external clock source
+		 sdram_clock_in_sclkfb 				: in    	std_logic;          					-- feedback SDRAM clock with PCB delays
+		 sdram_clock_in_sclk   				: out   	std_logic;          					-- clock to SDRAM
+		 cke    									: out   	std_logic;          					-- SDRAM clock-enable
+		 cs_n   									: out   	std_logic;          					-- SDRAM chip-select
+		 ras_n  									: out   	std_logic;          					-- SDRAM RAS
+		 cas_n  									: out   	std_logic;          					-- SDRAM CAS
+		 we_n   									: out   	std_logic;          					-- SDRAM write-enable
+		 ba     									: out   	std_logic_vector( 1 downto 0); 	-- SDRAM bank-address
+		 sAddr  									: out   	std_logic_vector(12 downto 0);  	-- SDRAM address bus
+		 sData  									: inout 	std_logic_vector(15 downto 0);  	-- data bus to/from SDRAM
+		 dqmh   									: out   	std_logic;           				-- SDRAM DQMH
+		 dqml   									: out   	std_logic;           				-- SDRAM DQML
+		 hdout0									: out		std_logic_vector(7 downto 0);
+		 hdout1									: out 	std_logic_vector(7 downto 0);
+		 done1									: out 	std_logic;
+		 done0									: out		std_logic;
+		 haddr0									: in 		std_logic_vector(15 downto 0);
+		 haddr1									: in	   std_logic_vector(15 downto 0);
+		 hdin0									: in  	std_logic_vector(7 downto 0);
+		 hdin1									: in 		std_logic_vector(7 downto 0);
+		 wr0 										: in		std_logic;
+		 rd1										: in 		std_logic;
+		 earlyBegun0							: out		std_logic;
+		 earlyBegun1							: out		std_logic;
+		 clk_i									: inout	std_logic
+			 );         	
+	end component SDRA	M_Component;
+end package SDRAM_Com	ponent_pckg;
+                     	
+                     	
+library IEEE;        	
+use IEEE.STD_LOGIC_11	64.ALL;
+use work.common.all; 	
+use WORK.test_dualpor	t_core_pckg.all;
+use Work.SDRAMControl	.all;
+                     	
+                     	
+entity SDRAM_Componen	t is
+--	generic(          	
+--		HADDR_WIDTH 		 :			natural	:= log2(16#FF_FFFF#);
+--		DATA_WIDTH     	 :       natural  := 16
+--	);                	
 	port(
 		 pinsIn				: in		SDRAMControlPinsIn;
 		 pinsOut				: out		SDRAMControlPinsOut;

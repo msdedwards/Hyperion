@@ -47,6 +47,28 @@ entity mux4 is -- four-input multiplexer
        y:      out STD_LOGIC_VECTOR(width-1 downto 0));
 end;
 
+library IEEE; 
+use IEEE.STD_LOGIC_1164.all;
+
+package Componentspkg is
+	component mux4 is -- four-input multiplexer
+	  generic(width: integer);
+	  port(d0, d1, d2, d3: in  STD_LOGIC_VECTOR(width-1 downto 0);
+			 s:      in  STD_LOGIC_VECTOR(1 downto 0);
+			 y:      out STD_LOGIC_VECTOR(width-1 downto 0));
+	end component mux4;
+	component mux2 is -- two-input multiplexer
+		generic(width: integer);
+		port(d0, d1: in  STD_LOGIC_VECTOR(width-1 downto 0);
+			 s:      in  STD_LOGIC;
+			 y:      out STD_LOGIC_VECTOR(width-1 downto 0));
+	end component mux2;
+	component adder is -- adder
+		generic(width: integer);
+		port(a, b: in  STD_LOGIC_VECTOR(width-1 downto 0);
+			 y:    out STD_LOGIC_VECTOR(width-1 downto 0));
+	end component adder;
+end package Componentspkg;
 
 
 

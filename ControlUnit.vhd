@@ -32,6 +32,23 @@ entity ControlUnit is
 	);
 end ControlUnit;
 
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+package ControlUnitpkg is
+	component ControlUnit
+		port(
+			op 				: in std_logic_vector(3 downto 0);
+			PCSRC				: out std_logic;
+			REGWRITE			: out std_logic;
+			MEMOP				: out std_logic;	
+			DATWRITE			: out std_logic;	
+			REGSRC 			: out std_logic_vector(1 downto 0);
+			statusSignals 	: in std_logic_vector(7 downto 0)
+		);
+	end component;
+end package ControlUnitpkg;
+
 architecture Behavioral of ControlUnit is
 
 begin

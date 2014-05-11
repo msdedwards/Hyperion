@@ -19,85 +19,92 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use Work.Decoderpkg.all;
+use work.alupkg.all;
+use work.regfilepkg.all;
+use work.DataMemorypkg.all;
+use work.Componentspkg.all;
+
+
 
 entity DataPathUnit is 
 		port(
-			clkMaster		: out std_logic;
-			clk 				: in std_logic;
-			PCSRC				: in std_logic;
-			REGWRITE			: in std_logic;
-			MEMOP				: in std_logic;	
-			DATWRITE			: in std_logic;	
-			REGSRC 			: in std_logic_vector(1 downto 0);
-			statusSignals 	: inout std_logic_vector(7 downto 0);
-			op					: out std_logic_vector(3 downto 0);
-			instr 			: in std_logic_vector(15 downto 0)
-		);						
+			clk							: 	in		std_logic;
+			reset							: 	in 	std_logic;
+			sw2_n							:	in		std_logic;
+			pps							:	out	std_logic_vector(6 downto 3);
+			led							: 	out	std_logic_vector(6 downto 0);
+			sdram_clock_in_sclkfb 	:	in		std_logic;
+			sdram_clock_out_sclk		:	out	std_logic;
+			cke     						: 	out	std_logic;                        -- SDRAM clock-enable
+			cs_n    						:	out 	std_logic;                        -- SDRAM chip-select
+			ras_n   						:	out 	std_logic;                        -- SDRAM RAS
+			cas_n   						: 	out 	std_logic;                        -- SDRAM CAS     
+			we_n    						: 	out 	std_logic;                        -- SDRAM write-enable
+			ba      						: 	out 	std_logic_vector( 1 downto 0);    -- SDRAM bank-address selects one of four banks
+			dqmh    						: 	out 	std_logic;                        -- SDRAM DQMH controls upper half of data bus during read
+			dqml    						: 	out 	std_logic;
+			sAddr							:	out	std_logic_vector(12 downto 0);
+			sData							: 	inout	std_logic_vector(15 downto 0);
+			PCSRC							: 	in 	std_logic;
+			REGWRITE						: 	in 	std_logic;
+			MEMOP							: 	in 	std_logic;	
+			DATWRITE						: 	in 	std_logic;	
+			REGSRC 						: 	in 	std_logic_vector(1 downto 0);
+			statusSignals 				: 	inout std_logic_vector(7 downto 0);
+			op								: 	out 	std_logic_vector(3 downto 0)
+			);						
 end DataPathUnit;
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use Work.Decoderpkg.all;
+use work.alupkg.all;
+use work.regfilepkg.all;
+use work.DataMemorypkg.all;
+use work.Componentspkg.all;
 
 
+package DataPathUnitpkg is
+	component DataPathUnit
+			port(
+				clk							: 	in		std_logic;
+				reset							: 	in 	std_logic;
+				sw2_n							:	in		std_logic;
+				pps							:	out	std_logic_vector(6 downto 3);
+				led							: 	out	std_logic_vector(6 downto 0);
+				sdram_clock_in_sclkfb 	:	in		std_logic;
+				sdram_clock_out_sclk		:	out	std_logic;
+				cke     						: 	out	std_logic;                        -- SDRAM clock-enable
+				cs_n    						:	out 	std_logic;                        -- SDRAM chip-select
+				ras_n   						:	out 	std_logic;                        -- SDRAM RAS
+				cas_n   						: 	out 	std_logic;                        -- SDRAM CAS     
+				we_n    						: 	out 	std_logic;                        -- SDRAM write-enable
+				ba      						: 	out 	std_logic_vector( 1 downto 0);    -- SDRAM bank-address selects one of four banks
+				dqmh    						: 	out 	std_logic;                        -- SDRAM DQMH controls upper half of data bus during read
+				dqml    						: 	out 	std_logic;
+				sAddr							:	out	std_logic_vector(12 downto 0);
+				sData							: 	inout	std_logic_vector(15 downto 0);
+				PCSRC							: 	in 	std_logic;
+				REGWRITE						: 	in 	std_logic;
+				MEMOP							: 	in 	std_logic;	
+				DATWRITE						: 	in 	std_logic;	
+				REGSRC 						: 	in 	std_logic_vector(1 downto 0);
+				statusSignals 				: 	inout std_logic_vector(7 downto 0);
+				op								: 	out 	std_logic_vector(3 downto 0)
+			);
+	end component DataPathUnit;
+end package DataPathUnitpkg;
 
 architecture Behavioral of DataPathUnit is
-	component Decoder
-		port(
-			instr:		in std_logic_vector(15 downto 0);
-			imm:			out std_logic_vector(7 downto 0);
-			a1, a2:		out std_logic_vector(4 downto 0);
-			op:			out std_logic_vector(3 downto 0)
-		);
-	end component;
-	component alu is
-		port (a, b:       in  STD_LOGIC_VECTOR(7 downto 0);
-			 alucontrol: in  STD_LOGIC_VECTOR(2 downto 0);
-			 result:     inout STD_LOGIC_VECTOR(7 downto 0);
-			 statusreg:	 inout STD_LOGIC_VECTOR(7 downto 0)
-		 );
-	end component alu;
-	component regfile is
-		port(
-			clk:           in  STD_LOGIC;
-			RegWrite:      in  STD_LOGIC;
-			MemOp:			 in STD_LOGIC;
-			a1, a2: 		 in  STD_LOGIC_VECTOR(4 downto 0);
-			wd:            in  STD_LOGIC_VECTOR(7 downto 0);
-			rd1, rd2, md:  out STD_LOGIC_VECTOR(7 downto 0)
-		);
-	end component regfile;
-	component DataMemory is
-		port(
-			clkMaster: out std_logic;
-			DatWrite: in std_logic;
-			addr: in std_logic_vector(15 downto 0);
-			dataIn: in std_logic_vector(7 downto 0)
-		);
-	end component DataMemory;
-	
-	component mux4 is -- four-input multiplexer
-	  generic(width: integer);
-	  port(d0, d1, d2, d3: in  STD_LOGIC_VECTOR(width-1 downto 0);
-			 s:      in  STD_LOGIC_VECTOR(1 downto 0);
-			 y:      out STD_LOGIC_VECTOR(width-1 downto 0));
-	end component mux4;
-	component mux2 is -- two-input multiplexer
-		generic(width: integer);
-		port(d0, d1: in  STD_LOGIC_VECTOR(width-1 downto 0);
-			 s:      in  STD_LOGIC;
-			 y:      out STD_LOGIC_VECTOR(width-1 downto 0));
-	end component mux2;
-	component adder is -- adder
-		generic(width: integer);
-		port(a, b: in  STD_LOGIC_VECTOR(width-1 downto 0);
-			 y:    out STD_LOGIC_VECTOR(width-1 downto 0));
-	end component adder;
 	
 	signal imm,srcA,srcB,writeData,memData,result: std_logic_vector(7 downto 0);
-	signal pc,pcPlusOne,pcJump,ZeroExtImm,dataMemoryAddr: std_logic_vector(15 downto 0);
+	signal pc,pcPlusOne,pcJump,ZeroExtImm,dataMemoryAddr,instr: std_logic_vector(15 downto 0);
 	signal addr1,addr2:std_logic_vector(4 downto 0);
 	signal aluControl: std_logic_vector(2 downto 0);
+	
 begin
+
 	ZeroExtImm <= "00000000"&imm;
 	dataMemoryAddr <= srcA&srcB;
 
@@ -170,8 +177,23 @@ begin
 	);
 	dm : DataMemory
 	port map
-	(	
-		clkMaster => clkMaster,
+	(
+		clk => clk,				
+		reset => reset,				
+		sw2_n => sw2_n,			
+		pps => pps,			
+		sdram_clock_in_sclkfb => sdram_clock_in_sclkfb,
+		sdram_clock_out_sclk	=> sdram_clock_out_sclk,
+		cke => cke,
+		cs_n => cs_n,				
+		ras_n => ras_n,				
+		cas_n => cas_n,			
+		we_n => we_n,			
+		ba => ba,				
+		dqmh => dqmh,					
+		dqml => dqml,				
+		sAddr => sAddr,				
+		sData => sData,								
 		DatWrite => DATWRITE,
 		addr => dataMemoryAddr,
 		dataIn => memData

@@ -19,28 +19,56 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use work.AVRpkg.all;
 
 
 
 entity AVRTop is
-	port(	 clk, reset: in std_logic;
-						pc: inout std_logic_vector(15 downto 0)
-						
+	port(	 	
+				clk							: 	in		std_logic;
+				reset							: 	in 	std_logic;
+				ce_n							:	out	std_logic;
+				sw2_n							:	in		std_logic;
+				pps							:	out	std_logic_vector(6 downto 3);
+				led							: 	out	std_logic_vector(6 downto 0);
+				sdram_clock_in_sclkfb 	:	in		std_logic;
+				sdram_clock_out_sclk		:	out	std_logic;
+				cke     						: 	out	std_logic;                        -- SDRAM clock-enable
+				cs_n    						:	out 	std_logic;                        -- SDRAM chip-select
+				ras_n   						:	out 	std_logic;                        -- SDRAM RAS
+				cas_n   						: 	out 	std_logic;                        -- SDRAM CAS     
+				we_n    						: 	out 	std_logic;                        -- SDRAM write-enable
+				ba      						: 	out 	std_logic_vector( 1 downto 0);    -- SDRAM bank-address selects one of four banks
+				dqmh    						: 	out 	std_logic;                        -- SDRAM DQMH controls upper half of data bus during read
+				dqml    						: 	out 	std_logic;
+				sAddr							:	out	std_logic_vector(12 downto 0);
+				sData							: 	inout	std_logic_vector(15 downto 0)
 		  );
 end AVRTop;
 
 architecture Behavioral of AVRTop is
-	component AVR is
-		port( 
-				clkMaster:out std_logic;
-				clk 	: in std_logic;
-				reset : in std_logic;
-				instr : in std_logic_vector(15 downto 0)
-		);
-	end component AVR;
-	signal instr: std_logic_vector(15 downto 0);
 begin
-	AVR1: AVR port map(clk,reset,instr);
+	ce_n <= '1';
+	AVR1: AVR
+	port map(
+			clk => clk,
+			reset	=> reset,
+			sw2_n	=> sw2_n,
+			pps => pps,
+			led => led,
+			sdram_clock_in_sclkfb => sdram_clock_in_sclkfb,
+			sdram_clock_out_sclk	=> sdram_clock_out_sclk,
+			cke => cke,
+			cs_n => cs_n,
+			ras_n => ras_n,
+			cas_n => cas_n,  
+			we_n  => we_n,
+			ba => ba,
+			dqmh => dqmh,
+			dqml => dqml,
+			sAddr	=> sAddr,
+			sData	=> sData
+		);
 
 end Behavioral;
 

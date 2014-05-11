@@ -11,6 +11,20 @@ entity Decoder is
 		);
 end Decoder;
 
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+package Decoderpkg is
+	component Decoder
+		port(
+			instr:		in std_logic_vector(15 downto 0);
+			imm:			out std_logic_vector(7 downto 0);
+			a1, a2:		out std_logic_vector(4 downto 0);
+			op:			out std_logic_vector(3 downto 0)
+		);
+	end component;
+end package Decoderpkg;
+
 
 architecture Behavioral of decoder is
 	signal nib1, nib2, nib3, nib4: std_logic_vector(3 downto 0);
