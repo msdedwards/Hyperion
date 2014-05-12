@@ -11,7 +11,6 @@ entity Decoder is
 		);
 end Decoder;
 
-
 architecture Behavioral of decoder is
 	signal nib1, nib2, nib3, nib4: std_logic_vector(3 downto 0);
 begin
@@ -23,33 +22,33 @@ begin
 	getop: process(nib1, nib2, nib3, nib4)
 	begin
 		case nib1 is
-			when "0000" => op <= "0000";
+			when "0000" => op <= "0000"; -- add
 			when "0001" =>
-				if (nib2(3) = '0') then
+				if (nib2(3) = '0') then -- cp
 					op <= "0001";
 				else
-					op <= "0011";
+					op <= "0010"; -- sub
 				end if;
 			when "0010" =>
 				case nib2(3 downto 2) is
-					when "00" => op <= "0011";
-					when "01" => op <= "0100";
-					when "10" => op <= "0101";
-					when "11" => op <= "0110";
+					when "00" => op <= "0011"; -- and
+					when "01" => op <= "0100"; -- eor
+					when "10" => op <= "0101"; -- or
+					when "11" => op <= "0110"; -- mov
 					when others => op <= "----";
 				end case;
 			when "1000" =>
 				if (nib2(1) = '0') then
-					op <= "0111";
+					op <= "0111"; -- ld (z)
 				else
-					op <= "1000";
+					op <= "1000"; -- st (z)
 				end if;
-			when "1110" => op <= "1001";
+			when "1110" => op <= "1001"; -- LDI
 			when "1111" =>
 				if (nib2(2) = '0') then
-					op <= "1010";
+					op <= "1010"; -- breq
 				else
-					op <= "1011";
+					op <= "1011"; -- brne
 				end if;
 			when others =>
 				op <= "----";
