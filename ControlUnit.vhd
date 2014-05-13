@@ -59,6 +59,7 @@ begin
 				MEMOP <= '0';
 				DATWRITE <= '0';
 				REGSRC <= "--";
+				aluOp <= "110";
 			when "0111" => -- ld (z)
 				PCSRC <= '0';
 				REGWRITE <= '1';
