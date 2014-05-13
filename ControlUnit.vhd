@@ -36,6 +36,7 @@ end ControlUnit;
 architecture Behavioral of ControlUnit is
 	signal zflag : std_logic;
 begin
+	zflag <= statusSignals(1);
 	main: process(op, zflag)
 	begin
 		case op is
