@@ -60,11 +60,13 @@ begin
   y <= a + b;
 end;
 
-architecture behave of pc is 
+architecture behave of pc is
+	signal count : std_logic_vector(15 downto 0) := (OTHERS => '0');
 begin
+	pc_out <= count;
 	process(clk_in) begin
 		if clk_in'event and clk_in = '0' then
-			pc_out <= pc_in;
+			count <= pc_in;
 		end if;
 	end process;
 end;
