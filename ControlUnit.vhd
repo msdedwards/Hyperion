@@ -33,10 +33,44 @@ entity ControlUnit is
 end ControlUnit;
 
 architecture Behavioral of ControlUnit is
-
 begin
-
-
+	main: process(op)
+	begin
+		case op is
+			when "0000" | "0011" | "0100" | "0101" | "0010" | "0110"	=> -- add and eor or sub mov
+				PCSRC <= '0';
+				REGWRITE <= '1';
+				MEMOP <= '0';
+				DATWRITE <= '0';
+				REGSRC <= "10";
+			when "0001" => -- cp
+				PCSRC <= '0';
+				REGWRITE <= '0';
+				MEMOP <= '0';
+				DATWRITE <= '0';
+				REGSRC <= "--";
+			when "0111" => -- ld (z)
+				PCSRC <= '0';
+				REGWRITE <= '1';
+				MEMOP <= '1';
+				DATWRITE <= '0';
+				REGSRC <= "01";
+			when "1000" => -- st (z)
+				PCSRC <= '0';
+				REGWRITE <= '1';
+				MEMOP <= '1';
+				DATWRITE <= '1';
+				REGSRC <= "01";
+			when "1001" => -- LDI
+				PCSRC <= '0';
+				REGWRITE <= '0';
+				MEMOP <= '0';
+				DATWRITE <= '0';
+				REGSRC <= "00";
+			when others =>
+				-- cry
+		end case;
+	end process;
 end Behavioral;
 
 
