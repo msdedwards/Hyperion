@@ -88,8 +88,8 @@ begin
 	
 	mem:SDRAM_Component
 	generic map(
-		HADDR_WIDTH => 16,
-		DATA_WIDTH => 8
+		HADDR_WIDTH => log2(16#FF_FFFF#),
+		DATA_WIDTH => 16
 	)
 	port map(
 		 sw2_n => sw2_n,   	-- active-low pushbutton input

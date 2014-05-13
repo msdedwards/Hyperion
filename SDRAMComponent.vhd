@@ -26,10 +26,10 @@ use Work.SDRAMControl.all;
                      	
                      	
 entity SDRAM_Component is
---	generic(          	
---		HADDR_WIDTH 		 :			natural	:= log2(16#FF_FFFF#);
---		DATA_WIDTH     	 :       natural  := 16
---	);                	
+	generic(
+			HADDR_WIDTH 	 :	natural	:= log2(16#FF_FFFF#);
+			DATA_WIDTH      : natural 	:= 8
+		);                	
 	port(
 		 sw2_n    								: in    	std_logic;           				-- active-low pushbutton input
 		 clk    									: in    	std_logic;          					-- main clock input from external clock source
@@ -71,7 +71,7 @@ use Work.SDRAMControl.all;
 package SDRAM_Component_pckg is
 	component SDRAM_Component 
 		generic(
-			HADDR_WIDTH 	 :	natural	:= 16;--log2(16#FF_FFFF#);
+			HADDR_WIDTH 	 :	natural	:= log2(16#FF_FFFF#);
 			DATA_WIDTH      : natural 	:= 8
 		);
 		port(
@@ -108,19 +108,22 @@ end package SDRAM_Component_pckg;
 
 
 architecture Behavioral of SDRAM_Component is
-	signal hdin016,hdin116: std_logic_vector(23 downto 0);
-	
+	signal hdin016,hdin116: std_logic_vector(15 downto 0);
+	signal hdout016,hdout116: std_logic_vector(15 downto 0);
+	signal haddr0Ext,haddr1Ext : std_logic_vector(HADDR_WIDTH-1 downto 0);
 begin
-	hdin016 <= "0000000000000000"&hdin0;
-	hdin116 <= "0000000000000000"&hdin1;
+	hdin016 <= "00000000"&hdin0;
+	hdin116 <= "00000000"&hdin1;
+	haddr0Ext <= "00000000"&haddr0;
+	haddr1Ext <= "00000000"&haddr1;
 	u0 : test_dualport_core
     generic map(
       FREQ        => 100_000,
       CLK_DIV     => 1.0,
       PIPE_EN     => true,
-      DATA_WIDTH  => sData'length,
+      --DATA_WIDTH  => sData'length,
       SADDR_WIDTH => sAddr'length,
-		HADDR_WIDTH => haddr0'length,
+		HADDR_WIDTH => HADDR_WIDTH,--haddr0'length,
       NROWS       => 8192,
       NCOLS       => 512,
       BEG_ADDR    => 16#00_0000#,
@@ -145,12 +148,12 @@ begin
       sData       => sData,
       dqmh        => dqmh,
       dqml        => dqml,
-		hdout0		=> hdout0,
-		hdout1		=> hdout1,
+		hdout0		=> hdout016,
+		hdout1		=> hdout116,
 		done1			=> done1,
 		done0			=> done0,
-		haddr0		=> haddr0,
-		haddr1		=> haddr1,
+		haddr0		=> haddr0Ext,
+		haddr1		=> haddr1Ext,
 		hdin0			=> hdin016,
 		hdin1			=> hdin116,
 		wr0 			=> wr0,

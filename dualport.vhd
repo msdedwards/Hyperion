@@ -160,7 +160,7 @@ entity sdramCntl is
     NROWS                :     natural := 4096;  -- number of rows in SDRAM array
     NCOLS                :     natural := 512;  -- number of columns in SDRAM array
     HADDR_WIDTH          :     natural := 23;  -- host-side address width
-    SADDR_WIDTH          :     natural := 12  -- SDRAM-side address width
+    SADDR_WIDTH          :     natural := 13  -- SDRAM-side address width
     );
   port(
     -- host side

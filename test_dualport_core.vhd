@@ -81,18 +81,18 @@ package test_dualport_core_pckg is
 		cas_n           : out   std_logic;  -- SDRAM CAS
 		we_n            : out   std_logic;  -- SDRAM write-enable
 		ba              : out   std_logic_vector(1 downto 0);  -- SDRAM bank-address
-		sAddr           : out   std_logic_vector(SADDR_WIDTH downto 0);  -- SDRAM address bus
-		sData           : inout std_logic_vector(DATA_WIDTH downto 0);  -- data bus to/from SDRAM
+		sAddr           : out   std_logic_vector(SADDR_WIDTH-1 downto 0);  -- SDRAM address bus
+		sData           : inout std_logic_vector(DATA_WIDTH-1 downto 0);  -- data bus to/from SDRAM
 		dqmh            : out   std_logic;  -- SDRAM DQMH
 		dqml            : out   std_logic;  -- SDRAM DQML
-		hdout0 			 : out	std_logic_vector(DATA_WIDTH downto 0);
-		hdout1			 : out 	std_logic_vector(DATA_WIDTH downto 0);
+		hdout0 			 : out	std_logic_vector(DATA_WIDTH-1 downto 0);
+		hdout1			 : out 	std_logic_vector(DATA_WIDTH-1 downto 0);
 		done1				 : out 	std_logic;
 		done0				 : out	std_logic;
-		hdin0				 : in 	std_logic_vector(DATA_WIDTH downto 0);
-		hdin1				 : in  	std_logic_vector(DATA_WIDTH downto 0);
-		haddr1			 : in	   std_logic_vector(HADDR_WIDTH downto 0);
-		haddr0			 : in 	std_logic_vector(HADDR_WIDTH downto 0);
+		hdin0				 : in 	std_logic_vector(DATA_WIDTH-1 downto 0);
+		hdin1				 : in  	std_logic_vector(DATA_WIDTH-1 downto 0);
+		haddr1			 : in	   std_logic_vector(HADDR_WIDTH-1 downto 0);
+		haddr0			 : in 	std_logic_vector(HADDR_WIDTH-1 downto 0);
 		wr0				 : in		std_logic;
 		wr1 				 : in		std_logic;
 		rd0				 : in 	std_logic;
@@ -157,18 +157,18 @@ entity test_dualport_core is
 		cas_n           : out   std_logic;  -- SDRAM CAS
 		we_n            : out   std_logic;  -- SDRAM write-enable
 		ba              : out   std_logic_vector(1 downto 0);  -- SDRAM bank-address
-		sAddr           : out   std_logic_vector(SADDR_WIDTH downto 0);  -- SDRAM address bus
-		sData           : inout std_logic_vector(DATA_WIDTH downto 0);  -- data bus to/from SDRAM
+		sAddr           : out   std_logic_vector(SADDR_WIDTH-1 downto 0);  -- SDRAM address bus
+		sData           : inout std_logic_vector(DATA_WIDTH-1 downto 0);  -- data bus to/from SDRAM
 		dqmh            : out   std_logic;  -- SDRAM DQMH
 		dqml            : out   std_logic;  -- SDRAM DQML
-		hdout0 			 : out	std_logic_vector(DATA_WIDTH downto 0);
-		hdout1			 : out 	std_logic_vector(DATA_WIDTH downto 0);
+		hdout0 			 : out	std_logic_vector(DATA_WIDTH-1 downto 0);
+		hdout1			 : out 	std_logic_vector(DATA_WIDTH-1 downto 0);
 		done1				 : out 	std_logic;
 		done0				 : out	std_logic;
-		hdin0				 : in 	std_logic_vector(DATA_WIDTH downto 0);
-		hdin1				 : in  	std_logic_vector(DATA_WIDTH downto 0);
-		haddr1			 : in	   std_logic_vector(HADDR_WIDTH downto 0);
-		haddr0			 : in 	std_logic_vector(HADDR_WIDTH downto 0);
+		hdin0				 : in 	std_logic_vector(DATA_WIDTH-1 downto 0);
+		hdin1				 : in  	std_logic_vector(DATA_WIDTH-1 downto 0);
+		haddr1			 : in	   std_logic_vector(HADDR_WIDTH-1 downto 0);
+		haddr0			 : in 	std_logic_vector(HADDR_WIDTH-1 downto 0);
 		wr0				 : in		std_logic;
 		wr1 				 : in		std_logic;
 		rd0				 : in 	std_logic;
@@ -189,8 +189,8 @@ architecture arch of test_dualport_core is
   signal   rst_i      									: std_logic;     -- internal reset signal
   signal   clk_b      									: std_logic;     -- buffered input (non-DLL) clock
   signal   lock       									: std_logic;     -- SDRAM clock DLL lock indicator
-  signal   dataIn     									: std_logic_vector(7 downto 0);  -- input databus from SDRAM
-  signal   dataOut    									: std_logic_vector(7 downto 0);  -- output databus to SDRAM
+  signal   dataIn     									: std_logic_vector(DATA_WIDTH-1 downto 0);  -- input databus from SDRAM
+  signal   dataOut    									: std_logic_vector(DATA_WIDTH-1 downto 0);  -- output databus to SDRAM
   signal   divCnt     									: std_logic_vector(22 downto 0);  -- clock divider
   signal   syncButton 									: std_logic_vector(1 downto 0);  -- button input sync'ed to clock domain
 
@@ -201,8 +201,8 @@ architecture arch of test_dualport_core is
   signal done                   						: std_logic;  -- read/write operation complete indicator
   signal rdDone             							: std_logic;  -- read operation complete indicator
   signal hAddr                						: std_logic_vector(HADDR_WIDTH-1 downto 0);  -- host-side address bus
-  signal hDIn                   						: std_logic_vector(7 downto 0);  -- host-side data to SDRAM
-  signal hDOut                						: std_logic_vector(7 downto 0);  -- host-side data from SDRAM
+  signal hDIn                   						: std_logic_vector(DATA_WIDTH-1 downto 0);  -- host-side data to SDRAM
+  signal hDOut                						: std_logic_vector(DATA_WIDTH-1 downto 0);  -- host-side data from SDRAM
   signal rd                         				: std_logic;  -- host-side read control signal
   signal wr                         				: std_logic;  -- host-side write control signal
   signal rst												: std_logic;
@@ -253,7 +253,7 @@ begin
     generic map(
       PIPE_EN         => PIPE_EN,
       PORT_TIME_SLOTS => PORT_TIME_SLOTS,
-      DATA_WIDTH      => 8,
+      DATA_WIDTH      => DATA_WIDTH,
       HADDR_WIDTH     => HADDR_WIDTH
       )
     port map(
@@ -308,11 +308,11 @@ begin
       FREQ         => FREQ,
       CLK_DIV      => CLK_DIV,
       PIPE_EN      => PIPE_EN,
-      DATA_WIDTH   => 8,
+      DATA_WIDTH   => DATA_WIDTH,
       NROWS        => NROWS,
       NCOLS        => NCOLS,
-      HADDR_WIDTH  => 24,
-      SADDR_WIDTH  => 13
+      HADDR_WIDTH  => HADDR_WIDTH,
+      SADDR_WIDTH  => SADDR_WIDTH
       )
     port map(
       clk          => clk,              -- master clock from external clock source (unbuffered)
