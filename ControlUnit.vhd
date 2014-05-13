@@ -82,7 +82,12 @@ begin
 				REGSRC <= "00";
 				aluOp <= "---";
 			when others =>
-				-- cry
+				PCSRC <= 'X';
+				REGWRITE <= 'X';
+				MEMOP <= 'X';
+				DATWRITE <= 'X';
+				REGSRC <= "XX";
+				aluOp <= "XXX";
 		end case;
 	end process;
 end Behavioral;
