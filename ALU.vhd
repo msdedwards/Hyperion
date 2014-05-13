@@ -21,7 +21,7 @@ begin
 		a xor b when "011",
 		a  -  b when "110",
 		a  +  b when "101",
-		b			when "000",
+		a			when "000",
 		"--------" when others;
 	 
 	 statusRegUpdate:process ( r ) is

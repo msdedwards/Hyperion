@@ -37,7 +37,7 @@ architecture Behavioral of AVR is
 			DATWRITE			: out std_logic;	
 			REGSRC 			: out std_logic_vector(1 downto 0);
 			statusSignals 	: in std_logic_vector(7 downto 0);
-			aluControl			: out std_logic_vector(2 downto 0)
+			aluOp		: out std_logic_vector(2 downto 0)
 		);
 	end component;
 	component DataPathUnit
@@ -89,7 +89,7 @@ begin
 		DATWRITE => DATWRITE,
 		REGSRC => REGSRC,
 		statusSignals => statusSignalsIn,
-		aluControl => aluControl
+		aluOp => aluControl
 	);
 	dp: DataPathUnit 
 	port map
