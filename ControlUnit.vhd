@@ -44,6 +44,15 @@ begin
 				MEMOP <= '0';
 				DATWRITE <= '0';
 				REGSRC <= "10";
+					case op is
+						when "0000" => aluOp <= "101"; -- add
+						when "0010" => aluOp <= "110"; -- sub
+						when "0011" => aluOp <= "000"; -- and
+						when "0100" => aluOp <= "011"; -- eor
+						when "0101" => aluOp <= "001"; -- or
+						when "0110" => aluOp <= "000"; -- mov
+						when others => aluOp <= "---";
+					end case;
 			when "0001" => -- cp
 				PCSRC <= '0';
 				REGWRITE <= '0';
