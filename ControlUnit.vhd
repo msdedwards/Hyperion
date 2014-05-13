@@ -57,13 +57,13 @@ begin
 				REGSRC <= "01";
 			when "1000" => -- st (z)
 				PCSRC <= '0';
-				REGWRITE <= '1';
+				REGWRITE <= '0';
 				MEMOP <= '1';
 				DATWRITE <= '1';
 				REGSRC <= "01";
 			when "1001" => -- LDI
 				PCSRC <= '0';
-				REGWRITE <= '0';
+				REGWRITE <= '1';
 				MEMOP <= '0';
 				DATWRITE <= '0';
 				REGSRC <= "00";
