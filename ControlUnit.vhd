@@ -34,8 +34,9 @@ entity ControlUnit is
 end ControlUnit;
 
 architecture Behavioral of ControlUnit is
+	signal zflag : std_logic;
 begin
-	main: process(op)
+	main: process(op, zflag)
 	begin
 		case op is
 			when "0000" | "0011" | "0100" | "0101" | "0010" | "0110"	=> -- add and eor or sub mov
@@ -81,6 +82,28 @@ begin
 				DATWRITE <= '0';
 				REGSRC <= "00";
 				aluOp <= "---";
+			when "1010" | "1011" => -- breq brne
+				REGWRITE <= '0';
+				MEMOP <= '0';
+				DATWRITE <= '0';
+				REGSRC <= "--";
+				aluOp <= "---";
+				case op is
+					when "1010" =>
+						if zflag = '1' then
+							PCSRC <= '1';
+						elsif zflag = '0' then
+							PCSRC <= '0';
+						end if;
+					when "1011" =>
+						if zflag = '0' then
+							PCSRC <= '1';
+						elsif zflag = '1' then
+							PCSRC <= '0';
+						end if;
+					when others =>
+						PCSRC <= 'X';
+				end case;
 			when others =>
 				PCSRC <= 'X';
 				REGWRITE <= 'X';
