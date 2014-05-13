@@ -35,7 +35,6 @@ architecture Behavioral of AVRTop is
 				reset : in std_logic
 		);
 	end component AVR;
-	signal instr: std_logic_vector(15 downto 0);
 begin
 	AVR1: AVR port map(clk,reset);
 
