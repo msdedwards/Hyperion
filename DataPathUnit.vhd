@@ -30,7 +30,8 @@ entity DataPathUnit is
 			REGSRC 			: in std_logic_vector(1 downto 0);
 			statusSignals 	: inout std_logic_vector(7 downto 0);
 			op					: out std_logic_vector(3 downto 0);
-			instr 			: out std_logic_vector(15 downto 0)
+			instr 			: out std_logic_vector(15 downto 0);
+			aluControl		: in std_logic_vector(2 downto 0)
 		);						
 end DataPathUnit;
 
@@ -98,7 +99,6 @@ architecture Behavioral of DataPathUnit is
 	signal imm,srcA,srcB,writeData,memData,result: std_logic_vector(7 downto 0);
 	signal next_pc,pcPlusOne,pcJump,ZeroExtImm, iMemOut: std_logic_vector(15 downto 0);
 	signal addr1,addr2:std_logic_vector(4 downto 0);
-	signal aluControl: std_logic_vector(2 downto 0);
 begin
 	ZeroExtImm <= "00000000"&imm;
 
