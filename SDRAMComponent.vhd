@@ -22,7 +22,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use work.common.all; 	
 use WORK.test_dualport_core_pckg.all;
-use Work.SDRAMControl.all;
+--use Work.SDRAMControl.all;
                      	
                      	
 entity SDRAM_Component is
@@ -66,7 +66,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use work.common.all;
 use WORK.test_dualport_core_pckg.all;
-use Work.SDRAMControl.all;
+--use Work.SDRAMControl.all;
 
 package SDRAM_Component_pckg is
 	component SDRAM_Component 

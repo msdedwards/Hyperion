@@ -24,6 +24,7 @@ use work.alupkg.all;
 use work.regfilepkg.all;
 use work.DataMemorypkg.all;
 use work.Componentspkg.all;
+use work.imempkg.all;
 
 
 
@@ -52,7 +53,8 @@ entity DataPathUnit is
 			DATWRITE						: 	in 	std_logic;	
 			REGSRC 						: 	in 	std_logic_vector(1 downto 0);
 			statusSignals 				: 	inout std_logic_vector(7 downto 0);
-			op								: 	out 	std_logic_vector(3 downto 0)
+			op								: 	out 	std_logic_vector(3 downto 0);
+			instr							: 	in		std_logic_vector(15 downto 0)
 			);						
 
 end DataPathUnit;
@@ -92,23 +94,24 @@ package DataPathUnitpkg is
 				DATWRITE						: 	in 	std_logic;	
 				REGSRC 						: 	in 	std_logic_vector(1 downto 0);
 				statusSignals 				: 	inout std_logic_vector(7 downto 0);
-				op								: 	out 	std_logic_vector(3 downto 0)
+				op								: 	out 	std_logic_vector(3 downto 0);
+				instr							: 	in		std_logic_vector(15 downto 0)
 			);
 	end component DataPathUnit;
 end package DataPathUnitpkg;
 
 architecture Behavioral of DataPathUnit is
 	
-	component pc is -- program counter
-		port(clk_in: 	 in std_logic;
-			  pc_in:      in  STD_LOGIC_VECTOR(15 downto 0);
-			  pc_out:      out STD_LOGIC_VECTOR(15 downto 0));
-	end component pc;
-	
-	component imem is -- instruction memory
-	port(a:  in  STD_LOGIC_VECTOR(15 downto 0);
-       rd: out STD_LOGIC_VECTOR(15 downto 0));
-	end component;
+--	component pc is -- program counter
+--		port(clk_in: 	 in std_logic;
+--			  pc_in:      in  STD_LOGIC_VECTOR(15 downto 0);
+--			  pc_out:      out STD_LOGIC_VECTOR(15 downto 0));
+--	end component pc;
+--	
+--	component imem is -- instruction memory
+--	port(a:  in  STD_LOGIC_VECTOR(15 downto 0);
+--       rd: out STD_LOGIC_VECTOR(15 downto 0));
+--	end component;
 	
 	signal pc_connector: std_logic_vector(15 downto 0);
 	signal imm,srcA,srcB,writeData,memData,result: std_logic_vector(7 downto 0);
@@ -120,7 +123,6 @@ begin
 
 	ZeroExtImm <= "00000000"&imm;
 	dataMemoryAddr <= srcA&srcB;
-
 	RegSrcMux: mux4
 	generic map(8)
 	port map

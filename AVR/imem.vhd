@@ -24,6 +24,20 @@ entity imem is -- instruction memory
 		 );
 end;
 
+library IEEE; 
+use IEEE.STD_LOGIC_1164.all; 
+use STD.TEXTIO.all;
+use IEEE.STD_LOGIC_UNSIGNED.all;  
+use IEEE.NUMERIC_STD.all;
+
+package imempkg is 
+	component imem is -- instruction memory
+	  port(a:  in  STD_LOGIC_VECTOR(15 downto 0);
+			 rd: out STD_LOGIC_VECTOR(15 downto 0)
+			 );
+	end component;
+end package imempkg;
+
 architecture behave of imem is
     type ramtype is array (63 downto 0) of STD_LOGIC_VECTOR(15 downto 0);
 

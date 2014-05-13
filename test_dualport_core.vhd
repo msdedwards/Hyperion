@@ -44,7 +44,7 @@ use IEEE.numeric_std.all;
 use WORK.common.all;
 use WORK.xsasdram.all;
 use WORK.sdram.all;
-use Work.SDRAMControl.all;
+--use Work.SDRAMControl.all;
 
 package test_dualport_core_pckg is
   component test_dualport_core
@@ -120,7 +120,7 @@ use IEEE.numeric_std.all;
 use WORK.common.all;
 use WORK.xsasdram.all;
 use WORK.sdram.all;
-use Work.SDRAMControl.all;
+--use Work.SDRAMControl.all;
 
 
 entity test_dualport_core is

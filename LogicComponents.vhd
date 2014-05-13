@@ -49,6 +49,14 @@ end;
 
 library IEEE; 
 use IEEE.STD_LOGIC_1164.all;
+entity pc is -- program counter
+  port(clk_in: 	 in std_logic;
+       pc_in:      in  STD_LOGIC_VECTOR(15 downto 0);
+       pc_out:      out STD_LOGIC_VECTOR(15 downto 0));
+end;
+
+library IEEE; 
+use IEEE.STD_LOGIC_1164.all;
 
 package Componentspkg is
 	component mux4 is -- four-input multiplexer
@@ -68,14 +76,15 @@ package Componentspkg is
 		port(a, b: in  STD_LOGIC_VECTOR(width-1 downto 0);
 			 y:    out STD_LOGIC_VECTOR(width-1 downto 0));
 	end component adder;
+	component pc is -- program counter
+  port(clk_in: 	 in std_logic;
+       pc_in:      in  STD_LOGIC_VECTOR(15 downto 0);
+			 pc_out:      out STD_LOGIC_VECTOR(15 downto 0));
+	end component pc;
 end package Componentspkg;
 
 
-entity pc is -- program counter
-  port(clk_in: 	 in std_logic;
-       pc_in:      in  STD_LOGIC_VECTOR(15 downto 0);
-       pc_out:      out STD_LOGIC_VECTOR(15 downto 0));
-end;
+
 
 
 architecture behave of adder is

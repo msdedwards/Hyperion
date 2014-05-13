@@ -20,7 +20,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use work.SDRAM_Component_pckg.all;
-use Work.SDRAMControl.all;
+--use Work.SDRAMControl.all;
 use WORK.common.all;
 
 entity DataMemory is
@@ -50,7 +50,7 @@ end DataMemory;
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use work.SDRAM_Component_pckg.all;
-use Work.SDRAMControl.all;
+--use Work.SDRAMControl.all;
 use WORK.common.all;
 
 package DataMemorypkg is 
