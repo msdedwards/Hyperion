@@ -22,8 +22,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity StatusRegister is
 	port(
-		currentValue 	: in std_logic_vector(7 downto 0);
-		nextValue		: out std_logic_vector(7 downto 0)
+		clk				: in std_logic;
+		srin 	: in std_logic_vector(7 downto 0);
+		srout		: out std_logic_vector(7 downto 0)
 	);
 end StatusRegister;
 
@@ -39,10 +40,18 @@ package StatusRegisterpkg is
 	end component;
 end package StatusRegisterpkg;
 
+
 architecture Behavioral of StatusRegister is
-
+	signal reg: std_logic_vector(7 downto 0);
 begin
-
-
+	-- lock in new value on falling clock
+	process(clk) begin
+		if clk'event and clk = '0' then
+			reg <= srin;
+		end if;
+	end process;
+	
+	-- output current value
+	srout <= reg;
 end Behavioral;
 

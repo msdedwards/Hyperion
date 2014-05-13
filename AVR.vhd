@@ -87,6 +87,10 @@ architecture Behavioral of AVR is
 	signal REGSRC : std_logic_vector(1 downto 0);
 	signal statusSignalsIn:std_logic_vector(7 downto 0);
 	signal statusSignalsOut:std_logic_vector(7 downto 0);
+	signal iMemOut:std_logic_vector(15 downto 0);
+	
+	
+
 
 begin
 	cu: ControlUnit 
@@ -126,13 +130,16 @@ begin
 		DATWRITE => DATWRITE,
 		REGSRC => REGSRC,
 		statusSignals => statusSignalsOut,
-		op => op
-		);
+		op => op,
+		instr => iMemOut
+	);
+
 	sr: StatusRegister 
 	port map
 	(
-		currentValue => statusSignalsOut,
-		nextValue => statusSignalsIn
+		clk => clk,
+		srout => statusSignalsOut,
+		srin => statusSignalsIn
 	);
 
 end Behavioral;
