@@ -55,9 +55,9 @@ entity DataPathUnit is
 			statusSignals 				: 	inout std_logic_vector(7 downto 0);
 			op								: 	out 	std_logic_vector(3 downto 0);
 			instr							: 	inout	std_logic_vector(15 downto 0);
-			statusSignalso : out std_logic_vector(7 downto 0);
-			statusSignalsi : in std_logic_vector(7 downto 0);
-			aluControl		: in std_logic_vector(2 downto 0)
+			statusSignalso 			: 	out 	std_logic_vector(7 downto 0);
+			statusSignalsi 			: 	in 	std_logic_vector(7 downto 0);
+			aluControl					: 	in 	std_logic_vector(2 downto 0);
 			clk_i							:	out	std_logic
 			);						
 end DataPathUnit;
@@ -99,9 +99,9 @@ package DataPathUnitpkg is
 			statusSignals 				: 	inout std_logic_vector(7 downto 0);
 			op								: 	out 	std_logic_vector(3 downto 0);
 			instr							: 	inout	std_logic_vector(15 downto 0);
-			statusSignalso : out std_logic_vector(7 downto 0);
-			statusSignalsi : in std_logic_vector(7 downto 0);
-			aluControl		: in std_logic_vector(2 downto 0)
+			statusSignalso 			: 	out 	std_logic_vector(7 downto 0);
+			statusSignalsi 			: 	in 	std_logic_vector(7 downto 0);
+			aluControl					: 	in 	std_logic_vector(2 downto 0);
 			clk_i							:	out	std_logic
 			);	
 	end component DataPathUnit;
@@ -131,7 +131,7 @@ architecture Behavioral of DataPathUnit is
 begin
 	clk_i <= clk_internal;
 	dataMemoryAddr <= srcA&srcB;
-begin
+
 	signextender: process( imm )
 	begin
 		if imm(7) = '1' then

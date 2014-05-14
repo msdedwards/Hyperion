@@ -3,11 +3,12 @@ use IEEE.STD_LOGIC_1164.all;
 use IEEE.STD_LOGIC_UNSIGNED.all;
 
 entity alu is -- Arithmetic/Logic unit with add/sub, AND, OR, set less than
-	 port(a, b:       in  STD_LOGIC_VECTOR(7 downto 0);
-		 alucontrol: in  STD_LOGIC_VECTOR(2 downto 0);
-		 result:     out STD_LOGIC_VECTOR(7 downto 0);
-		 statusrego: out STD_LOGIC_VECTOR(7 downto 0);
-		 statusregi: in STD_LOGIC_VECTOR(7 downto 0));
+	port (a, b:       in  	STD_LOGIC_VECTOR(7 downto 0);
+				alucontrol: in  	STD_LOGIC_VECTOR(2 downto 0);
+				result:     inout STD_LOGIC_VECTOR(7 downto 0);
+				statusregi:	in 	STD_LOGIC_VECTOR(7 downto 0);
+				statusrego:	out 	STD_LOGIC_VECTOR(7 downto 0)
+		 );
 end;
 
 library IEEE; 
@@ -16,10 +17,11 @@ use IEEE.STD_LOGIC_UNSIGNED.all;
 
 package alupkg is
 	component alu is
-		port (a, b:       in  STD_LOGIC_VECTOR(7 downto 0);
-			 alucontrol: in  STD_LOGIC_VECTOR(2 downto 0);
-			 result:     inout STD_LOGIC_VECTOR(7 downto 0);
-			 statusreg:	 inout STD_LOGIC_VECTOR(7 downto 0)
+		port (a, b:       in  	STD_LOGIC_VECTOR(7 downto 0);
+				alucontrol: in  	STD_LOGIC_VECTOR(2 downto 0);
+				result:     inout STD_LOGIC_VECTOR(7 downto 0);
+				statusregi:	in 	STD_LOGIC_VECTOR(7 downto 0);
+				statusrego:	out 	STD_LOGIC_VECTOR(7 downto 0)
 		 );
 	end component alu;
 end package alupkg;
