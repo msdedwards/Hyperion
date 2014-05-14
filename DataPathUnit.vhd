@@ -111,7 +111,7 @@ begin
 		d0 => imm,
 		d1 => "XXXXXXXX", -- will be the out data from the data memory
 		d2 => result,
-		d3 => "XXXXXXXX",
+		d3 => "--------",
 		s  => REGSRC,
 		y  => writeData
 	);
