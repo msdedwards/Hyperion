@@ -82,6 +82,7 @@ begin
 	begin
 		case nib1 is
 			when "1110" => imm <= nib2 & nib4;
+			when "1111" => imm <= '0' & nib2(1 downto 0) & nib3 & nib4(3);
 			when others => imm <= "--------";
 		end case;
 	end process;
