@@ -88,7 +88,7 @@ begin
 		MEMOP => MEMOP,
 		DATWRITE => DATWRITE,
 		REGSRC => REGSRC,
-		statusSignals => statusSignalsIn,
+		statusSignals => statusSignalsOut,
 		aluOp => aluControl
 	);
 	dp: DataPathUnit 
@@ -100,7 +100,7 @@ begin
 		MEMOP => MEMOP,
 		DATWRITE => DATWRITE,
 		REGSRC => REGSRC,
-		statusSignals => statusSignalsOut,
+		statusSignals => statusSignalsIn,
 		op => op,
 		instr => iMemOut,
 		aluControl => aluControl

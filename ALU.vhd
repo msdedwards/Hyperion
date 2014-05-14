@@ -24,7 +24,7 @@ begin
 		a			when "000",
 		"--------" when others;
 	 
-	 statusRegUpdate:process ( r ) is
+	 statusRegUpdate:process ( r, alucontrol ) is
 	 begin
 		if  alucontrol = "010" or alucontrol = "001" or alucontrol = "011" then
 			n <= r(7);
@@ -59,8 +59,7 @@ begin
 			end if;
 			c <= (a(7) and b(7)) or (b(7) and not r(7)) or (not r(7) and a(7));
 		end if;
-		
 	 end process;
-
+	 statusreg <= i&t&h&s&v&n&z&c;
 end;
 
