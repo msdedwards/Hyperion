@@ -22,7 +22,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 library IEEE; 
 use IEEE.STD_LOGIC_1164.all; 
-use IEEE.STD_LOGIC_UNSIGNED.all;
+use ieee.numeric_std.all;
 entity adder is -- adder
 	generic(width: integer);
 	port(a, b: in  STD_LOGIC_VECTOR(width-1 downto 0);
@@ -89,14 +89,16 @@ end package Componentspkg;
 
 architecture behave of adder is
 begin
-  y <= a + b;
+  y <= std_logic_vector(signed(a) + signed(b));
 end;
 
-architecture behave of pc is 
+architecture behave of pc is
+	signal count : std_logic_vector(15 downto 0) := (OTHERS => '0');
 begin
+	pc_out <= count;
 	process(clk_in) begin
 		if clk_in'event and clk_in = '0' then
-			pc_out <= pc_in;
+			count <= pc_in;
 		end if;
 	end process;
 end;

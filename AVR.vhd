@@ -88,6 +88,7 @@ architecture Behavioral of AVR is
 	signal statusSignalsIn:std_logic_vector(7 downto 0);
 	signal statusSignalsOut:std_logic_vector(7 downto 0);
 	signal iMemOut:std_logic_vector(15 downto 0);
+	signal aluControl:std_logic_vector(2 downto 0);
 	
 	
 
@@ -102,7 +103,8 @@ begin
 		MEMOP => MEMOP,
 		DATWRITE => DATWRITE,
 		REGSRC => REGSRC,
-		statusSignals => statusSignalsIn
+		statusSignals => statusSignalsOut,
+		aluOp => aluControl
 	);
 	dp: DataPathUnit 
 	port map
@@ -129,9 +131,11 @@ begin
 		MEMOP => MEMOP,
 		DATWRITE => DATWRITE,
 		REGSRC => REGSRC,
-		statusSignals => statusSignalsOut,
+		statusSignalsi => statusSignalsOut,
+		statusSignalso => statusSignalsIn,
 		op => op,
-		instr => iMemOut
+		instr => iMemOut,
+		aluControl => aluControl
 	);
 
 	sr: StatusRegister 

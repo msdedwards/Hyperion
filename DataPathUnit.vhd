@@ -55,9 +55,11 @@ entity DataPathUnit is
 			statusSignals 				: 	inout std_logic_vector(7 downto 0);
 			op								: 	out 	std_logic_vector(3 downto 0);
 			instr							: 	inout	std_logic_vector(15 downto 0);
+			statusSignalso : out std_logic_vector(7 downto 0);
+			statusSignalsi : in std_logic_vector(7 downto 0);
+			aluControl		: in std_logic_vector(2 downto 0)
 			clk_i							:	out	std_logic
 			);						
-
 end DataPathUnit;
 
 library IEEE;
@@ -72,37 +74,41 @@ use work.Componentspkg.all;
 package DataPathUnitpkg is
 	component DataPathUnit
 			port(
-				clk							: 	in		std_logic;
-				reset							: 	in 	std_logic;
-				sw2_n							:	in		std_logic;
-				pps							:	out	std_logic_vector(6 downto 3);
-				led							: 	out	std_logic_vector(6 downto 0);
-				sdram_clock_in_sclkfb 	:	in		std_logic;
-				sdram_clock_out_sclk		:	out	std_logic;
-				cke     						: 	out	std_logic;                        -- SDRAM clock-enable
-				cs_n    						:	out 	std_logic;                        -- SDRAM chip-select
-				ras_n   						:	out 	std_logic;                        -- SDRAM RAS
-				cas_n   						: 	out 	std_logic;                        -- SDRAM CAS     
-				we_n    						: 	out 	std_logic;                        -- SDRAM write-enable
-				ba      						: 	out 	std_logic_vector( 1 downto 0);    -- SDRAM bank-address selects one of four banks
-				dqmh    						: 	out 	std_logic;                        -- SDRAM DQMH controls upper half of data bus during read
-				dqml    						: 	out 	std_logic;
-				sAddr							:	out	std_logic_vector(12 downto 0);
-				sData							: 	inout	std_logic_vector(15 downto 0);
-				PCSRC							: 	in 	std_logic;
-				REGWRITE						: 	in 	std_logic;
-				MEMOP							: 	in 	std_logic;	
-				DATWRITE						: 	in 	std_logic;	
-				REGSRC 						: 	in 	std_logic_vector(1 downto 0);
-				statusSignals 				: 	inout std_logic_vector(7 downto 0);
-				op								: 	out 	std_logic_vector(3 downto 0);
-				instr							: 	in		std_logic_vector(15 downto 0);
-				clk_i							:	out	std_logic
-			);
+			clk							: 	in		std_logic;
+			reset							: 	in 	std_logic;
+			sw2_n							:	in		std_logic;
+			pps							:	out	std_logic_vector(6 downto 3);
+			led							: 	out	std_logic_vector(6 downto 0);
+			sdram_clock_in_sclkfb 	:	in		std_logic;
+			sdram_clock_out_sclk		:	out	std_logic;
+			cke     						: 	out	std_logic;                        -- SDRAM clock-enable
+			cs_n    						:	out 	std_logic;                        -- SDRAM chip-select
+			ras_n   						:	out 	std_logic;                        -- SDRAM RAS
+			cas_n   						: 	out 	std_logic;                        -- SDRAM CAS     
+			we_n    						: 	out 	std_logic;                        -- SDRAM write-enable
+			ba      						: 	out 	std_logic_vector( 1 downto 0);    -- SDRAM bank-address selects one of four banks
+			dqmh    						: 	out 	std_logic;                        -- SDRAM DQMH controls upper half of data bus during read
+			dqml    						: 	out 	std_logic;
+			sAddr							:	out	std_logic_vector(12 downto 0);
+			sData							: 	inout	std_logic_vector(15 downto 0);
+			PCSRC							: 	in 	std_logic;
+			REGWRITE						: 	in 	std_logic;
+			MEMOP							: 	in 	std_logic;	
+			DATWRITE						: 	in 	std_logic;	
+			REGSRC 						: 	in 	std_logic_vector(1 downto 0);
+			statusSignals 				: 	inout std_logic_vector(7 downto 0);
+			op								: 	out 	std_logic_vector(3 downto 0);
+			instr							: 	inout	std_logic_vector(15 downto 0);
+			statusSignalso : out std_logic_vector(7 downto 0);
+			statusSignalsi : in std_logic_vector(7 downto 0);
+			aluControl		: in std_logic_vector(2 downto 0)
+			clk_i							:	out	std_logic
+			);	
 	end component DataPathUnit;
 end package DataPathUnitpkg;
 
 architecture Behavioral of DataPathUnit is
+
 	
 --	component pc is -- program counter
 --		port(clk_in: 	 in std_logic;
@@ -120,13 +126,21 @@ architecture Behavioral of DataPathUnit is
 	signal iMemSignalOut: std_logic_vector(15 downto 0);
 	signal next_pc,pcPlusOne,pcJump,ZeroExtImm,dataMemoryAddr: std_logic_vector(15 downto 0);
 	signal addr1,addr2:std_logic_vector(4 downto 0);
-	signal aluControl: std_logic_vector(2 downto 0);
 	signal clk_internal: std_logic;
 	
 begin
 	clk_i <= clk_internal;
-	ZeroExtImm <= "00000000"&imm;
 	dataMemoryAddr <= srcA&srcB;
+begin
+	signextender: process( imm )
+	begin
+		if imm(7) = '1' then
+			ZeroExtImm <= "11111111"&imm;
+		else
+			ZeroExtImm <= "00000000"&imm;
+		end if;
+	end process;
+
 	RegSrcMux: mux4
 	generic map(8)
 	port map
@@ -134,7 +148,7 @@ begin
 		d0 => imm,
 		d1 => memDataOut, -- will be the out data from the data memory
 		d2 => result,
-		d3 => "XXXXXXXX",
+		d3 => "--------",
 		s  => REGSRC,
 		y  => writeData
 	);
@@ -179,7 +193,8 @@ begin
 		b => srcB,
 		alucontrol => aluControl,
 		result => result,
-		statusreg => statusSignals
+		statusrego => statusSignalso,
+		statusregi => statusSignalsi
 	);
 	reg: regfile
 	port map 

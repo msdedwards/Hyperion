@@ -43,7 +43,7 @@ end package StatusRegisterpkg;
 
 
 architecture Behavioral of StatusRegister is
-	signal reg: std_logic_vector(7 downto 0);
+	signal reg: std_logic_vector(7 downto 0) := (OTHERS => '0');
 begin
 	-- lock in new value on falling clock
 	process(clk) begin
