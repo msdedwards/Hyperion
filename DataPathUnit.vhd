@@ -53,7 +53,8 @@ architecture Behavioral of DataPathUnit is
 		port (a, b:       in  STD_LOGIC_VECTOR(7 downto 0);
 			 alucontrol: in  STD_LOGIC_VECTOR(2 downto 0);
 			 result:     inout STD_LOGIC_VECTOR(7 downto 0);
-			 statusreg:	 inout STD_LOGIC_VECTOR(7 downto 0)
+			 statusrego:	 out STD_LOGIC_VECTOR(7 downto 0);
+			 statusregi:	 in STD_LOGIC_VECTOR(7 downto 0)
 		 );
 	end component alu;
 	component regfile is
