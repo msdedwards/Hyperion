@@ -157,6 +157,8 @@ begin
 		hdin0			=> hdin016,
 		hdin1			=> hdin116,
 		wr0 			=> wr0,
+		wr1			=> '0',
+		rd0			=> '0',
 		rd1			=> rd1,
 		earlyBegun0 => earlyBegun0,
 		earlyBegun1 => earlyBegun1,
