@@ -26,24 +26,27 @@ use WORK.common.all;
 entity DataMemory is
 	port(
 		clk							: 	in		std_logic;
-		reset							: 	in 	std_logic;
-		sw2_n							:	in		std_logic;
-		pps							:	out	std_logic_vector(6 downto 3);
-		sdram_clock_in_sclkfb 	:	in		std_logic;
-		sdram_clock_out_sclk		:	out	std_logic;
-		cke     						: 	out	std_logic;                        -- SDRAM clock-enable
-		cs_n    						:	out 	std_logic;                        -- SDRAM chip-select
-		ras_n   						:	out 	std_logic;                        -- SDRAM RAS
-		cas_n   						: 	out 	std_logic;                        -- SDRAM CAS     
-		we_n    						: 	out 	std_logic;                        -- SDRAM write-enable
-		ba      						: 	out 	std_logic_vector( 1 downto 0);    -- SDRAM bank-address selects one of four banks
-		dqmh    						: 	out 	std_logic;                        -- SDRAM DQMH controls upper half of data bus during read
-		dqml    						: 	out 	std_logic;
-		sAddr							:	out	std_logic_vector(12 downto 0);
-		sData							: 	inout	std_logic_vector(15 downto 0);
-		DatWrite						: 	in 	std_logic;
-		addr							: 	in 	std_logic_vector(15 downto 0);
-		dataIn						: 	in 	std_logic_vector(7 downto 0)
+			reset							: 	in 	std_logic;
+			sw2_n							:	in		std_logic;
+			pps							:	out	std_logic_vector(6 downto 3);
+			sdram_clock_in_sclkfb 	:	in		std_logic;
+			sdram_clock_out_sclk		:	out	std_logic;
+			cke     						: 	out	std_logic;                        -- SDRAM clock-enable
+			cs_n    						:	out 	std_logic;                        -- SDRAM chip-select
+			ras_n   						:	out 	std_logic;                        -- SDRAM RAS
+			cas_n   						: 	out 	std_logic;                        -- SDRAM CAS     
+			we_n    						: 	out 	std_logic;                        -- SDRAM write-enable
+			ba      						: 	out 	std_logic_vector( 1 downto 0);    -- SDRAM bank-address selects one of four banks
+			dqmh    						: 	out 	std_logic;                        -- SDRAM DQMH controls upper half of data bus during read
+			dqml    						: 	out 	std_logic;
+			sAddr							:	out	std_logic_vector(12 downto 0);
+			sData							: 	inout	std_logic_vector(15 downto 0);
+			-------------------------------------------------------------
+			DatWrite						: 	in 	std_logic;
+			addr							: 	in 	std_logic_vector(15 downto 0);
+			dataOut						: 	out	std_logic_vector(7 downto 0);
+			dataIn						: 	in 	std_logic_vector(7 downto 0);
+			clk_i							:	out	std_logic
 	);
 end DataMemory;
 
@@ -72,20 +75,47 @@ package DataMemorypkg is
 			dqml    						: 	out 	std_logic;
 			sAddr							:	out	std_logic_vector(12 downto 0);
 			sData							: 	inout	std_logic_vector(15 downto 0);
+			-------------------------------------------------------------
 			DatWrite						: 	in 	std_logic;
 			addr							: 	in 	std_logic_vector(15 downto 0);
-			dataIn						: 	in 	std_logic_vector(7 downto 0)
+			dataOut						: 	out	std_logic_vector(7 downto 0);
+			dataIn						: 	in 	std_logic_vector(7 downto 0);
+			clk_i							:	out	std_logic
 		);
 	end component DataMemory;
 end package DataMemorypkg;
 
 architecture Behavioral of DataMemory is
-	signal clk_i: std_logic;
+	signal clk_internal: std_logic;
 	signal earlyBegun1, earlyBegun0, rd1,wr0,done0,done1:std_logic;
 	signal hdin0,hdin1,hdout1,hdout0: std_logic_vector(7 downto 0);
 	signal haddr1,haddr0:std_logic_vector(15 downto 0);
 begin
-	
+		-- process to setup data read
+	 process ( addr, DatWrite) is
+	 begin
+		if DatWrite = '0' then
+			haddr1 <= addr;
+			rd1 <= '1';
+		else
+			haddr0 <= addr;
+			hdin0 <= dataIn;
+			wr0 <= '1';
+		end if;
+	 end process;
+	 
+	 --Then the read operation is done
+	 process(done1) is
+	 begin
+		dataOut <= hdout1;
+	 end process;
+	 
+	 --process to setup data write
+--	 process(done0) is
+--	 begin
+--		done
+--	 end process;
+	 
 	mem:SDRAM_Component
 	generic map(
 		HADDR_WIDTH => log2(16#FF_FFFF#),
@@ -118,7 +148,7 @@ begin
 		 rd1 => rd1,		
 		 earlyBegun0 => earlyBegun0,		
 		 earlyBegun1 => earlyBegun1,
-		 clk_i => clk_i	
+		 clk_i => clk_internal	
 		 );
 
 end Behavioral;

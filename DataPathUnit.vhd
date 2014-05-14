@@ -54,7 +54,8 @@ entity DataPathUnit is
 			REGSRC 						: 	in 	std_logic_vector(1 downto 0);
 			statusSignals 				: 	inout std_logic_vector(7 downto 0);
 			op								: 	out 	std_logic_vector(3 downto 0);
-			instr							: 	in		std_logic_vector(15 downto 0)
+			instr							: 	inout	std_logic_vector(15 downto 0);
+			clk_i							:	out	std_logic
 			);						
 
 end DataPathUnit;
@@ -95,7 +96,8 @@ package DataPathUnitpkg is
 				REGSRC 						: 	in 	std_logic_vector(1 downto 0);
 				statusSignals 				: 	inout std_logic_vector(7 downto 0);
 				op								: 	out 	std_logic_vector(3 downto 0);
-				instr							: 	in		std_logic_vector(15 downto 0)
+				instr							: 	in		std_logic_vector(15 downto 0);
+				clk_i							:	out	std_logic
 			);
 	end component DataPathUnit;
 end package DataPathUnitpkg;
@@ -114,13 +116,15 @@ architecture Behavioral of DataPathUnit is
 --	end component;
 	
 	signal pc_connector: std_logic_vector(15 downto 0);
-	signal imm,srcA,srcB,writeData,memData,result: std_logic_vector(7 downto 0);
-	signal next_pc,pcPlusOne,pcJump,ZeroExtImm,dataMemoryAddr,instr,iMemOut: std_logic_vector(15 downto 0);
+	signal imm,srcA,srcB,writeData,memDataIn,memDataOut,result: std_logic_vector(7 downto 0);
+	signal iMemSignalOut: std_logic_vector(15 downto 0);
+	signal next_pc,pcPlusOne,pcJump,ZeroExtImm,dataMemoryAddr: std_logic_vector(15 downto 0);
 	signal addr1,addr2:std_logic_vector(4 downto 0);
 	signal aluControl: std_logic_vector(2 downto 0);
+	signal clk_internal: std_logic;
 	
 begin
-
+	clk_i <= clk_internal;
 	ZeroExtImm <= "00000000"&imm;
 	dataMemoryAddr <= srcA&srcB;
 	RegSrcMux: mux4
@@ -128,7 +132,7 @@ begin
 	port map
 	(
 		d0 => imm,
-		d1 => "XXXXXXXX", -- will be the out data from the data memory
+		d1 => memDataOut, -- will be the out data from the data memory
 		d2 => result,
 		d3 => "XXXXXXXX",
 		s  => REGSRC,
@@ -162,7 +166,7 @@ begin
 	dec: Decoder 
 	port map 
 	(
-		instr => iMemOut,
+		instr => iMemSignalOut,
 		imm => imm,
 		a1 => addr1,
 		a2 => addr2,
@@ -180,7 +184,7 @@ begin
 	reg: regfile
 	port map 
 	(
-		clk => clk,
+		clk => clk_internal,
 		RegWrite => RegWrite,
 		MemOp => MemOp,
 		a1 => addr1,
@@ -188,7 +192,7 @@ begin
 		wd => writeData,
 		rd1 => srcA,
 		rd2 => srcB,
-		md => memData
+		md => memDataIn
 	);
 	dm : DataMemory
 	port map
@@ -211,19 +215,21 @@ begin
 		sData => sData,								
 		DatWrite => DATWRITE,
 		addr => dataMemoryAddr,
-		dataIn => memData
+		dataIn => memDataIn,
+		clk_i => clk_internal,
+		dataOut => memDataOut
 	);
 	instrmem: imem
 	port map
 	(
 		a => pc_connector, -- address from regfile goes here
-		rd => iMemOut
+		rd => iMemSignalOut
 	);
-	instr <= iMemOut;
+	instr <= iMemSignalOut;
 	PCounter:pc
 	port map
 	(
-		clk_in => clk,
+		clk_in => clk_internal,
 		pc_in => next_pc,
 		pc_out => pc_connector
 	);

@@ -26,13 +26,13 @@ use work.AVRpkg.all;
 entity AVRTop is
 	port(	 	
 				clk							: 	in		std_logic;
-				reset							: 	in 	std_logic;
+				rst_n							: 	in 	std_logic;
 				ce_n							:	out	std_logic;
 				sw2_n							:	in		std_logic;
 				pps							:	out	std_logic_vector(6 downto 3);
 				led							: 	out	std_logic_vector(6 downto 0);
-				sdram_clock_in_sclkfb 	:	in		std_logic;
-				sdram_clock_out_sclk		:	out	std_logic;
+				sclkfb 						:	in		std_logic;
+				sclk							:	out	std_logic;
 				cke     						: 	out	std_logic;                        -- SDRAM clock-enable
 				cs_n    						:	out 	std_logic;                        -- SDRAM chip-select
 				ras_n   						:	out 	std_logic;                        -- SDRAM RAS
@@ -52,12 +52,12 @@ begin
 	AVR1: AVR
 	port map(
 			clk => clk,
-			reset	=> reset,
+			reset	=> rst_n,
 			sw2_n	=> sw2_n,
 			pps => pps,
 			led => led,
-			sdram_clock_in_sclkfb => sdram_clock_in_sclkfb,
-			sdram_clock_out_sclk	=> sdram_clock_out_sclk,
+			sdram_clock_in_sclkfb => sclkfb,
+			sdram_clock_out_sclk	=> sclk,
 			cke => cke,
 			cs_n => cs_n,
 			ras_n => ras_n,
