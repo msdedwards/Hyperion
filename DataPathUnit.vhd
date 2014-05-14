@@ -102,7 +102,14 @@ architecture Behavioral of DataPathUnit is
 	signal next_pc,pcPlusOne,pcJump,ZeroExtImm, iMemOut: std_logic_vector(15 downto 0);
 	signal addr1,addr2:std_logic_vector(4 downto 0);
 begin
-	ZeroExtImm <= "00000000"&imm;
+	signextender: process( imm )
+	begin
+		if imm(7) = '1' then
+			ZeroExtImm <= "11111111"&imm;
+		else
+			ZeroExtImm <= "00000000"&imm;
+		end if;
+	end process;
 
 	RegSrcMux: mux4
 	generic map(8)
