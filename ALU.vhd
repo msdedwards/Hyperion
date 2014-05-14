@@ -5,8 +5,9 @@ use IEEE.STD_LOGIC_UNSIGNED.all;
 entity alu is -- Arithmetic/Logic unit with add/sub, AND, OR, set less than
 	 port(a, b:       in  STD_LOGIC_VECTOR(7 downto 0);
 		 alucontrol: in  STD_LOGIC_VECTOR(2 downto 0);
-		 result:     inout STD_LOGIC_VECTOR(7 downto 0);
-		 statusreg:	 inout STD_LOGIC_VECTOR(7 downto 0));
+		 result:     out STD_LOGIC_VECTOR(7 downto 0);
+		 statusrego: out STD_LOGIC_VECTOR(7 downto 0);
+		 statusregi: in STD_LOGIC_VECTOR(7 downto 0));
 end;
 
 architecture behave of alu is
@@ -23,6 +24,15 @@ begin
 		a  +  b when "101",
 		a			when "000",
 		"--------" when others;
+		
+	 i <= statusregi(7);
+	 t <= statusregi(6);
+	 h <= statusregi(5);
+	 s <= statusregi(4);
+	 v <= statusregi(3);
+	 n <= statusregi(2);
+	 z <= statusregi(1);
+	 c <= statusregi(0);
 	 
 	 statusRegUpdate:process ( r, alucontrol ) is
 	 begin
@@ -60,6 +70,6 @@ begin
 			c <= (a(7) and b(7)) or (b(7) and not r(7)) or (not r(7) and a(7));
 		end if;
 	 end process;
-	 statusreg <= i&t&h&s&v&n&z&c;
+	 statusrego <= i&t&h&s&v&n&z&c;
 end;
 
