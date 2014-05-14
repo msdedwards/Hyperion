@@ -131,7 +131,6 @@ architecture Behavioral of DataPathUnit is
 begin
 	clk_i <= clk_internal;
 	dataMemoryAddr <= srcA&srcB;
-	led <= memDataout(6 downto 0);
 	signextender: process( imm )
 	begin
 		if imm(7) = '1' then
