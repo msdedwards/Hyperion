@@ -28,11 +28,12 @@ entity DataPathUnit is
 			MEMOP				: in std_logic;	
 			DATWRITE			: in std_logic;	
 			REGSRC 			: in std_logic_vector(1 downto 0);
-			statusSignals 	: inout std_logic_vector(7 downto 0);
+			statusSignalso : out std_logic_vector(7 downto 0);
+			statusSignalsi : in std_logic_vector(7 downto 0);
 			op					: out std_logic_vector(3 downto 0);
 			instr 			: out std_logic_vector(15 downto 0);
 			aluControl		: in std_logic_vector(2 downto 0)
-		);						
+		);
 end DataPathUnit;
 
 library IEEE;
@@ -155,7 +156,8 @@ begin
 		b => srcB,
 		alucontrol => aluControl,
 		result => result,
-		statusreg => statusSignals
+		statusrego => statusSignalso,
+		statusregi => statusSignalsi
 	);
 	reg: regfile
 	port map 

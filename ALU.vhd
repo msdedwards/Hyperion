@@ -24,15 +24,6 @@ begin
 		a  +  b when "101",
 		a			when "000",
 		"--------" when others;
-		
-	 i <= statusregi(7);
-	 t <= statusregi(6);
-	 h <= statusregi(5);
-	 s <= statusregi(4);
-	 v <= statusregi(3);
-	 n <= statusregi(2);
-	 z <= statusregi(1);
-	 c <= statusregi(0);
 	 
 	 statusRegUpdate:process ( r, alucontrol ) is
 	 begin
@@ -68,6 +59,15 @@ begin
 				z <= '0';
 			end if;
 			c <= (a(7) and b(7)) or (b(7) and not r(7)) or (not r(7) and a(7));
+		else
+			i <= statusregi(7);
+			t <= statusregi(6);
+			h <= statusregi(5);
+			s <= statusregi(4);
+			v <= statusregi(3);
+			n <= statusregi(2);
+			z <= statusregi(1);
+			c <= statusregi(0);
 		end if;
 	 end process;
 	 statusrego <= i&t&h&s&v&n&z&c;
