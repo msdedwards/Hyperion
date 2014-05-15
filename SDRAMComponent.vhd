@@ -101,7 +101,7 @@ package SDRAM_Component_pckg is
 		 rd1										: in 		std_logic;
 		 earlyBegun0							: out		std_logic;
 		 earlyBegun1							: out		std_logic;
-		 clk_i									: inout	std_logic
+		 clk_i									: out		std_logic
 			 );         	
 	end component SDRAM_Component;
 end package SDRAM_Component_pckg;

@@ -181,7 +181,7 @@ entity test_dualport_core is
 		rdPending1		 : out 	std_logic;
 		rdDone0			 : out 	std_logic;
 		rdDone1			 : out 	std_logic;
-		clk_i				 : inout	std_logic
+		clk_i				 : out	std_logic
     );
 end entity;
 
@@ -211,7 +211,7 @@ architecture arch of test_dualport_core is
   signal progress0, progress1 						: std_logic_vector(1 downto 0);  -- test progress indicator
   signal err0, err1           						: std_logic;  -- test error flag
   signal haddr0Ext										: std_logic_vector(22 downto 0);
-
+  signal clk_internal									: std_logic;
   -- set the reset flag upon startup
   attribute INIT          : string;
   attribute INIT of rst_i : signal is "1";
@@ -249,6 +249,9 @@ begin
   ------------------------------------------------------------------------
   -- Instantiate the dualport module
   ------------------------------------------------------------------------
+  
+  clk_i <= clk_internal;
+  
   u1 : dualport
     generic map(
       PIPE_EN         => PIPE_EN,
@@ -257,7 +260,7 @@ begin
       HADDR_WIDTH     => HADDR_WIDTH
       )
     port map(
-      clk             => clk_i,
+      clk             => clk_internal,
       -- memory tester port 0 connections
       rst0            => rst_i,
       rd0             => rd0,
@@ -317,7 +320,7 @@ begin
     port map(
       clk          => clk,              -- master clock from external clock source (unbuffered)
       bufclk       => clk_b,            -- buffered master clock output
-      clk1x        => clk_i,            -- synchronized master clock (accounts for delays to external SDRAM)
+      clk1x        => clk_internal,            -- synchronized master clock (accounts for delays to external SDRAM)
       clk2x        => open,             -- synchronized doubled master clock
       lock         => lock,             -- DLL lock indicator
       rst          => rst,              -- reset

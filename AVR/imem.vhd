@@ -87,7 +87,7 @@ architecture behave of imem is
 begin
   process ( a ) is
     -- use the impure function to read RAM from a file and store in the FPGA's ram memory
-  	 variable mem: ramtype := InitRamFromFile("memtest.dat");
+  	 variable mem: ramtype := InitRamFromFile("memfile.dat");
   begin
       rd <= mem( to_integer(unsigned(a)) );
   end process;

@@ -127,9 +127,26 @@ architecture Behavioral of DataPathUnit is
 	signal next_pc,pcPlusOne,pcJump,ZeroExtImm,dataMemoryAddr: std_logic_vector(15 downto 0);
 	signal addr1,addr2:std_logic_vector(4 downto 0);
 	signal clk_internal: std_logic;
-	
+	signal slow_clk: std_logic;
 begin
-	clk_i <= clk_internal;
+	process(clk_internal) is
+		variable cnt: integer;
+	begin
+		if clk_internal'event and clk_internal='1' then
+			cnt := cnt + 1;
+			if cnt < 12500000 then
+			   slow_clk <= '0';
+			elsif cnt < 25000000 then
+			   slow_clk <= '1';				
+			else
+			   slow_clk <= '1';	
+				cnt := 0;
+			end if;
+		end if;
+	end process;
+	led(5 downto 0) <= pc_connector(5 downto 0);
+	led(6) <= pcsrc;
+	--clk_i <= clk_internal;
 	dataMemoryAddr <= srcA&srcB;
 	signextender: process( imm )
 	begin
@@ -198,7 +215,7 @@ begin
 	reg: regfile
 	port map 
 	(
-		clk => clk_internal,
+		clk => slow_clk,
 		RegWrite => RegWrite,
 		MemOp => MemOp,
 		a1 => addr1,
@@ -243,7 +260,7 @@ begin
 	PCounter:pc
 	port map
 	(
-		clk_in => clk_internal,
+		clk_in => slow_clk,
 		pc_in => next_pc,
 		pc_out => pc_connector
 	);

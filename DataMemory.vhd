@@ -115,7 +115,7 @@ begin
 --	 begin
 --		done
 --	 end process;
-	 
+	 clk_i <= clk_internal;
 	mem:SDRAM_Component
 	generic map(
 		HADDR_WIDTH => log2(16#FF_FFFF#),

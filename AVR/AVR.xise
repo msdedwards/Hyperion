@@ -125,13 +125,13 @@
     <property xil_pn:name="Compile UNISIM (Functional) Simulation Library" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Compile XilinxCoreLib (CORE Generator) Simulation Library" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Compile for HDL Debugging" xil_pn:value="true" xil_pn:valueState="default"/>
-    <property xil_pn:name="Configuration Clk (Configuration Pins)" xil_pn:value="Pull Up" xil_pn:valueState="default"/>
-    <property xil_pn:name="Configuration Pin Done" xil_pn:value="Pull Up" xil_pn:valueState="default"/>
-    <property xil_pn:name="Configuration Pin HSWAPEN" xil_pn:value="Pull Up" xil_pn:valueState="default"/>
-    <property xil_pn:name="Configuration Pin M0" xil_pn:value="Pull Up" xil_pn:valueState="default"/>
-    <property xil_pn:name="Configuration Pin M1" xil_pn:value="Pull Up" xil_pn:valueState="default"/>
-    <property xil_pn:name="Configuration Pin M2" xil_pn:value="Pull Up" xil_pn:valueState="default"/>
-    <property xil_pn:name="Configuration Pin Program" xil_pn:value="Pull Up" xil_pn:valueState="default"/>
+    <property xil_pn:name="Configuration Clk (Configuration Pins)" xil_pn:value="Float" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Configuration Pin Done" xil_pn:value="Float" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Configuration Pin HSWAPEN" xil_pn:value="Float" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Configuration Pin M0" xil_pn:value="Float" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Configuration Pin M1" xil_pn:value="Float" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Configuration Pin M2" xil_pn:value="Float" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Configuration Pin Program" xil_pn:value="Float" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Configuration Rate" xil_pn:value="Default (6)" xil_pn:valueState="default"/>
     <property xil_pn:name="Correlate Output to Input Design" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Create ASCII Configuration File" xil_pn:value="false" xil_pn:valueState="default"/>
@@ -210,10 +210,10 @@
     <property xil_pn:name="Incremental Compilation" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Insert Buffers to Prevent Pulse Swallowing" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Instantiation Template Target Language Xps" xil_pn:value="VHDL" xil_pn:valueState="default"/>
-    <property xil_pn:name="JTAG Pin TCK" xil_pn:value="Pull Up" xil_pn:valueState="default"/>
-    <property xil_pn:name="JTAG Pin TDI" xil_pn:value="Pull Up" xil_pn:valueState="default"/>
-    <property xil_pn:name="JTAG Pin TDO" xil_pn:value="Pull Up" xil_pn:valueState="default"/>
-    <property xil_pn:name="JTAG Pin TMS" xil_pn:value="Pull Up" xil_pn:valueState="default"/>
+    <property xil_pn:name="JTAG Pin TCK" xil_pn:value="Float" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="JTAG Pin TDI" xil_pn:value="Float" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="JTAG Pin TDO" xil_pn:value="Float" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="JTAG Pin TMS" xil_pn:value="Float" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Keep Hierarchy" xil_pn:value="No" xil_pn:valueState="default"/>
     <property xil_pn:name="Language" xil_pn:value="VHDL" xil_pn:valueState="default"/>
     <property xil_pn:name="Last Applied Goal" xil_pn:value="Balanced" xil_pn:valueState="default"/>
@@ -353,7 +353,7 @@
     <property xil_pn:name="Top-Level Source Type" xil_pn:value="HDL" xil_pn:valueState="default"/>
     <property xil_pn:name="Trim Unconnected Signals" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Tristate On Configuration Pulse Width" xil_pn:value="0" xil_pn:valueState="default"/>
-    <property xil_pn:name="Unused IOB Pins" xil_pn:value="Pull Down" xil_pn:valueState="default"/>
+    <property xil_pn:name="Unused IOB Pins" xil_pn:value="Float" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Use 64-bit PlanAhead on 64-bit Systems" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Use Clock Enable" xil_pn:value="Yes" xil_pn:valueState="default"/>
     <property xil_pn:name="Use Custom Project File Behavioral" xil_pn:value="false" xil_pn:valueState="default"/>
@@ -376,7 +376,7 @@
     <property xil_pn:name="Use Synthesis Constraints File" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="User Browsed Strategy Files" xil_pn:value="" xil_pn:valueState="default"/>
     <property xil_pn:name="UserID Code (8 Digit Hexadecimal)" xil_pn:value="0xFFFFFFFF" xil_pn:valueState="default"/>
-    <property xil_pn:name="VHDL Source Analysis Standard" xil_pn:value="VHDL-93" xil_pn:valueState="default"/>
+    <property xil_pn:name="VHDL Source Analysis Standard" xil_pn:value="VHDL-200X" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Value Range Check" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Verilog 2001 Xst" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Verilog Macros" xil_pn:value="" xil_pn:valueState="default"/>
